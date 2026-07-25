@@ -1,252 +1,322 @@
-# 📚 Literature Wiki
+# 📚 Literature Wiki · 文献维基
 
-[![中文](https://img.shields.io/badge/Readme-中文-red)](README_zh.md)
+[![English](https://img.shields.io/badge/Readme-English-blue)](README_en.md)
 
-A ready-to-use template for building an AI-native literature wiki from a collection of academic PDFs — using Claude Code as the orchestrator that builds and maintains it via a multi-round, multi-agent pipeline.
+一个**开箱即用的 AI 原生文献知识库模板**——将学术 PDF 合集自动构建为按主题组织的**维基百科式综合页面**，由 Claude Code 多代理流水线驱动。
 
-> **Inspired by** [karpathy/llm-wiki](https://github.com/karpathy/llm-wiki): *"Instead of just retrieving from raw documents at query time, the LLM incrementally builds and maintains a persistent wiki… The knowledge is compiled once and then kept current, not re-derived on every query."*
+> **灵感来源**：[karpathy/llm-wiki](https://github.com/karpathy/llm-wiki)：*"LLM 不只是查询时检索原始文档，而是增量构建和维护一个持久化的维基……知识一次编译，持续更新，而不是每次查询重新推导。"*
 
----
-
-## 🧭 What Is This?
-
-An **AI-native literature wiki** that transforms a collection of academic PDFs into a set of focused **Wikipedia-style synthesis pages** — each centered on one topic (concept, debate, mechanism, measure, method, or theme) and integrating evidence from across the whole collection.
-
-**Not** per-paper summaries. **Not** annotated bibliographies. **Not** "Paper X says A, Paper Y says B" listings. The wiki reads like an encyclopedia of the literature, organised by topic.
-
-The architecture is fully domain-agnostic and works for any academic research area. **Cross-platform** — macOS, Linux, and Windows (PowerShell) are all supported.
+> **当前维护者**：刘岳虎（西安石油大学经济管理学院），研究方向：产业融合、数实融合、技术融合、文化产业。
 
 ---
 
-## ✨ New: Read Your Wiki in a Browser — Search · Browse · Chat
+## ⚡ 常用命令速查
 
-The template now ships an **optional web layer** on top of the build pipeline — three surfaces over the same `wiki/`:
+> 这是日常使用最频繁的命令，放在最前面方便查阅。
 
-- 🔎 **Search** (`/search`) — instant client-side full-text search (MiniSearch) over every page. No backend, no AI.
-- 📖 **Browse** (`/wiki`) — a **two-pane layout**: a left category sidebar (collapsible by layer, counts, active highlight, search box; a mobile slide-in drawer), a center reading column rendering the `wiki/` markdown (wikilinks, callouts, KaTeX) straight from the filesystem, and a right "On this page" TOC on desktop. No backend, no AI.
-- 💬 **Chat** (`/`) — optional agentic chat backend talking to one OpenAI-compatible endpoint (`RAG_OPENAI_BASE_URL`), defaulting to local Ollama's `/v1` (swap in any hosted model), that streams cited answers grounded in your wiki; its thread-history sidebar is persistent on desktop and a slide-in drawer on mobile.
+### PDF 管理（外部 PDF，无需复制或移动源文件）
 
-These layers are **purely additive** — the `/wiki-build` pipeline is unchanged, and Search + Browse work fully offline even when the Chat backend is absent. See [docs/search-and-browse.md](docs/search-and-browse.md), [docs/web-frontend.md](docs/web-frontend.md), [docs/rag-backend.md](docs/rag-backend.md), and [docs/deployment.md](docs/deployment.md).
+```powershell
+# 将外部 PDF 目录链接到项目（生成路径映射表）
+python scripts/link_pdfs.py "e:\Desktop\Desktop\test" --mode manifest
+
+# 批量转换全部 PDF 为 Markdown（MinerU 云端 API，高质量）
+python scripts/link_pdfs.py "e:\Desktop\Desktop\test" --mode manifest --convert
+
+# 增量更新：只转换新增的 PDF（日常最常用）
+python scripts/link_pdfs.py "e:\Desktop\Desktop\test" --mode manifest --convert --new-only
+
+# 单篇转换（指定转换器）
+python scripts/convert_pdf_to_markdown.py "Author and Author - YYYY - Title.pdf" --converter mineru --overwrite
+```
+
+### 维基构建与维护
+
+```bash
+/wiki-build          # 默认 2 轮多代理构建
+/wiki-build 3        # 3 轮（更深入的语料库）
+/wiki-query          # 从维基层回答研究问题
+/wiki-synthesis      # 保存一次性洞察为单独页面
+/wiki-update-db      # 检查、验证、维护维基健康
+/wiki-serve          # 构建搜索索引并启动 Web 界面
+```
+
+### 验证脚本
+
+```bash
+python -m py_compile scripts/*.py                         # 编译检查
+python scripts/check_links.py wiki raw_markdown           # 断链检测
+python scripts/check_orphans.py wiki                      # 孤立页面检测
+python scripts/validate_frontmatter.py wiki               # Frontmatter 验证
+python scripts/export_wiki.py --wiki-dir wiki             # 导出搜索索引
+```
 
 ---
 
-## 🎯 Core Idea: Not a RAG System, Not a Summary Archive
+## 🧭 这是什么？
 
-Most literature management tools fall into one of two categories:
+一个 **AI 原生的文献维基**——将学术 PDF 合集转化为一组聚焦的**维基百科式综合页面**，每个页面围绕一个主题（概念、争论、机制、测量、方法或主题），从整个文献合集中整合证据。
 
-- **PDF archives** — files stored by folder, searched when needed.
-- **RAG systems** — documents chunked and embedded, retrieved at query time to generate an answer.
+**不是**单篇论文摘要。**不是**带注释的参考文献目录。**不是**「论文 X 说 A，论文 Y 说 B」的罗列。而是以主题组织、百科全书式的文献知识体系。
 
-**literature-wiki is neither.** It is a persistent, evolving wiki where each build pass produces focused synthesis pages, written and reviewed by multiple agents in parallel, that integrate the whole collection on each topic. The wiki is the primary interface — not the PDFs, not an embedding index.
-
-When you ask "how do different papers conceptualize concept X?" — the answer is already pre-organized as a Wikipedia-style page at `wiki/concepts/concept-x.md`, with an encyclopedic lead paragraph, sub-topic sections that integrate multiple papers, and explicit current-assessment callouts. No retrieval step needed.
+架构完全领域无关，适用于任何学术研究领域。**跨平台**——macOS、Linux、Windows（PowerShell）均支持。
 
 ---
 
-## 🏗️ Three-Layer Architecture
+## 🎯 核心理念：不是 RAG，不是摘要存档
+
+大多数文献管理工具属于两类：
+
+- **PDF 存档**——按文件夹存储，需要时搜索。
+- **RAG 系统**——文档被切块和嵌入，查询时检索并生成回答。
+
+**Literature Wiki 两者都不是。** 它是一个持久化、持续演进的维基，每次构建产出聚焦的综合页面，由多个代理并行编写和审查，在每个主题上整合整个合集。维基是主要界面——不是 PDF，不是嵌入索引。
+
+当你问「不同论文如何概念化 X？」——回答已经以维基百科式页面预先组织在 `wiki/concepts/concept-x.md`，具有百科式引导段落、整合多篇论文的子主题章节和明确的当前评估标注。无需检索步骤。
+
+---
+
+## 🏗️ 三层架构
 
 ```
 raw_pdfs/
-    └── Immutable source PDFs. Never edited. Source of truth.
+    └── 不可变的源 PDF。永不编辑。事实来源。
+        实际 PDF 可存放在外部目录，通过 pdf_sources.json 映射。
 
 raw_markdown/
-    ├── papers/      ← Faithful PDF-to-markdown conversions (via markitdown)
-    ├── metadata/    ← Structured sidecar data extracted at conversion time
-    └── assets/      ← Images and attachments extracted from PDFs
+    ├── papers/      ← 忠实的 PDF→Markdown 转换（MinerU 云端 API）
+    ├── metadata/    ← 转换时提取的结构化元数据
+    └── assets/      ← 从 PDF 提取的图片和附件
 
 wiki/
-    ├── sources/     ← Per-paper bibliographic record (anchor, not deliverable)
-    ├── concepts/    ← Wikipedia-style concept pages (deliverable)
-    ├── mechanisms/  ← Wikipedia-style mechanism pages
-    ├── methods/     ← Wikipedia-style method pages
-    ├── measures/    ← Wikipedia-style measure pages
-    ├── debates/     ← Wikipedia-style debate pages
-    ├── synthesis/   ← Higher-level cross-cutting pages
-    ├── templates/   ← Page templates (Wikipedia-style outlines)
-    ├── schema/      ← Naming rules, frontmatter specs, build workflow
-    └── log.md       ← Append-only history of all build/synthesis/lint events
+    ├── sources/     ← 每篇论文的文献记录（锚点，非交付物）
+    ├── concepts/    ← 维基百科式概念页面（交付物）
+    ├── mechanisms/  ← 维基百科式机制页面
+    ├── methods/     ← 维基百科式方法页面
+    ├── measures/    ← 维基百科式测量页面
+    ├── debates/     ← 维基百科式争论页面
+    ├── synthesis/   ← 更高层次的交叉页面
+    ├── templates/   ← 页面模板
+    ├── schema/      ← 命名规则、Frontmatter 规范、构建工作流
+    └── log.md       ← 仅追加的构建/合成/检查历史
 ```
 
-**Layer responsibilities:**
+**各层职责：**
 
-- `raw_pdfs/` — preservation only. LLMs never write here.
-- `raw_markdown/` — faithful machine-readable conversion. Authoritative for all substantive claims on synthesis pages.
-- `wiki/` — structured knowledge. The **synthesis pages** are the primary interface for queries; **source pages** are bibliographic anchors only.
-- `scripts/` — deterministic utilities (validation, indexing, export, normalization). No academic judgment.
+- `raw_pdfs/` — 仅保存。LLM 永远不在此写入。**支持外部 PDF 目录**：通过 `pdf_sources.json` 清单，PDF 可存放在任意位置（如按期刊分类的文件夹），无需移动或复制。
+- `raw_markdown/` — 忠实的机器可读转换。所有综合页面的实质性声明以此为准。
+- `wiki/` — 结构化知识。**综合页面**是查询的主要界面；**源页面**仅作为文献锚点。
+- `scripts/` — 确定性工具（验证、索引、导出、规范化）。不做学术判断。
 
 ---
 
-## ⚙️ Four Core Operations
+## ⚙️ 四大核心操作
 
-| Operation | Skill | What it does |
+| 操作 | 技能 | 功能 |
 |---|---|---|
-| **build** | `/wiki-build` | Multi-round, multi-agent build/rebuild. Plans the page set from the corpus, writes pages in parallel by cluster, reviews them in parallel, revises until they hit the quality bar, then lints. Domain-agnostic — cluster themes emerge from the actual papers. |
-| **query** | `/wiki-query` | Answer research questions from the synthesis layer first; drill to source pages or raw markdown only when needed. |
-| **synthesis** | `/wiki-synthesis` | Save a single one-off insight as one wiki page (concept, debate, mechanism, or synthesis) — the surgical one-page-at-a-time complement to `/wiki-build`. |
-| **update-db** | `/wiki-update-db` | Lint and health-check — broken-link detection, orphan-page detection, frontmatter validation, metadata export. |
+| **build** | `/wiki-build` | 多轮、多代理构建/重建。从语料库规划页面集，按集群并行编写、并行审查，反复修订直至达到质量标准，最后检查。 |
+| **query** | `/wiki-query` | 从综合层优先回答研究问题；仅在需要时深入源页面或原始 Markdown。 |
+| **synthesis** | `/wiki-synthesis` | 将一次性洞察保存为单个维基页面——逐页精准补充。 |
+| **update-db** | `/wiki-update-db` | 检查和健康检查——断链检测、孤立页面检测、Frontmatter 验证、元数据导出。 |
 
-**Usage rhythm:**
+**使用节奏：**
 
-- After dropping new PDFs in `raw_pdfs/` → `/wiki-build`
-- Answering research questions → `/wiki-query`
-- After a discussion that produced a non-obvious insight → `/wiki-synthesis`
-- Monthly, and after every major build → `/wiki-update-db`
+- 在 `raw_pdfs/` 中添加新 PDF 后 → `/wiki-build`
+- 回答研究问题 → `/wiki-query`
+- 讨论产生了非显而易见的洞察后 → `/wiki-synthesis`
+- 每月一次，每次大型构建后 → `/wiki-update-db`
 
 ---
 
-## 🤖 The Multi-Agent Build Pipeline
+## 🔗 PDF 外部链接方案
 
-`/wiki-build` is the centerpiece. It runs as a round-based, file-handoff orchestrator:
+### 设计思路
+
+项目需要读取 PDF 才能运行 `/wiki-build` 流水线，但 PDF 通常存放在外部目录（如按期刊分类的文件夹），且**不应移动或重命名源文件**。
+
+解决方案：**路径清单（Manifest）模式**——`raw_pdfs/pdf_sources.json` 记录每个标准化名称到真实文件路径的映射。所有读取 PDF 的脚本通过它解析实际路径，无需开发者模式或管理员权限。
+
+### 工作流
 
 ```
-Phase 0  Scan & workspace setup
-Phase 1  PDF → raw_markdown for new papers
-Phase 2  Source pages — parallel writers, then light review
-Phase 3  Round plan — single planner subagent produces page list with clusters
-Phase 4  Round execution
-           Stage A: Curator (1 subagent) — page briefs with outlines & spot-checks
-           Stage B: Cluster writers (parallel) — Wikipedia-style page drafts
-           Stage C: Cluster reviewers (parallel) — three-lens review with verdicts
-           Stage D: Revisers (parallel) — apply fix lists; PASS pages pass through
-         Repeat for round 2 (deepen, add deferred page types) and round 3 (polish) as needed
-Phase 5  Decide whether to start another round
-Phase 6  Finalise — copy round-output to wiki/, run full lint, update indices
+                     ┌──────────────────────┐
+                     │  e:\Desktop\test\    │  ← PDF 真实存放位置
+                     │  ├── JPE/            │     （按期刊分类，不动）
+                     │  ├── RES/            │
+                     │  └── ...             │
+                     └────────┬─────────────┘
+                              │
+                link_pdfs.py --mode manifest
+                              │
+                     ┌────────▼─────────────┐
+                     │  raw_pdfs/            │
+                     │  └── pdf_sources.json │  ← 名称 → 路径映射表
+                     └────────┬─────────────┘
+                              │
+              convert_pdf_to_markdown.py
+              （查询 manifest，解析真实路径）
+                              │
+                     ┌────────▼─────────────┐
+                     │  raw_markdown/papers/ │  ← 转换后的 Markdown
+                     └──────────────────────┘
 ```
 
-All intermediate artefacts live in `agent_tasks/wikipedia-rewrite_<DATE><HHMM>/`. Subagents communicate by writing files; the orchestrator collects ≤200-word status summaries.
+### PDF 命名规范
 
-The pattern is modelled on a working protocol that successfully rewrote a paper-listing wiki into a Wikipedia-style synthesis ([provenance noted in the skill SKILL.md](.claude/skills/wiki-build/SKILL.md#provenance)).
+源 PDF 文件名为 `Author1_Author2_YYYY_Title.pdf`（下划线分隔），脚本自动转换为项目规范 `Author1 Author2 - YYYY - Title.pdf`（` - ` 分隔）。中文「等」自动替换为「et al」。
 
----
+### 增量更新
 
-## 🧠 Key Design Principles
+添加新 PDF 后，运行 `--convert --new-only` 自动检测并仅转换新文件：
 
-### Separation of roles
+```powershell
+python scripts/link_pdfs.py "e:\Desktop\Desktop\test" --mode manifest --convert --new-only
+```
 
-> **LLM (orchestrator)** plans, spawns subagents, collects status, decides on revise/round continuation. Never writes wiki content itself.
->
-> **LLM (subagents)** curate briefs, write pages, review pages, revise pages — file handoff only, ≤200-word status returns.
->
-> **Scripts** validate frontmatter, check links, detect orphans, export metadata — deterministic only, no academic judgment.
->
-> **Researcher** sets research direction, picks papers, edits the round plan if the clustering is off, trust-calibrates the final pages.
-
-### Wikipedia-style synthesis, not paper-listing
-
-Every synthesis page meets these non-negotiables (full rubric at `.claude/skills/wiki-build/rubric.md`):
-
-- **Encyclopedic lead paragraph** — defines the topic, says why it matters, previews the page. No bullets.
-- **Subject-matter backbone** — section headings name sub-topics, sub-questions, formal-model components — **not papers**. No "Paper Claims" section.
-- **Integrated citations** — multi-cite where claims converge; name papers in flow only when their distinct contribution matters.
-- **Three knowledge levels visible but not dominant** — paper claims via inline `[[slug]]`, cross-paper patterns via italicised generalisations, current assessment via short callout blocks.
-
-### Read the raw paper, not the source page
-
-The wiki distinguishes three claim levels:
-
-1. **Paper claim** — what a specific paper asserts. Inline `[[slug]]` citation.
-2. **Cross-paper pattern** — pattern across ≥2 papers. Italicised generalisation with multi-citation.
-3. **Current assessment** — the wiki's current judgment. Short callout block with a date.
-
-These levels are visible inline but **never** become separate top-level sections — keeping them separate as architecture is what produced the paper-listing format we replaced.
-
-Every writer and reviewer reads `raw_markdown/papers/<slug>.md`, never bases substantive claims on `wiki/sources/<slug>.md`. Source pages are derived summaries; raw markdown is authoritative.
-
-### Domain adaptivity
-
-The build protocol is fixed. What flexes with the research domain:
-
-- **What pages exist** — the planner inspects the actual corpus.
-- **Cluster themes** — emergent from the corpus, not pre-set.
-- **Frontier / extension axis** — optional. Only included when the corpus contains a coherent frontier sub-literature (e.g., AI-era extensions, post-2020 replication wave). Not forced.
+脚本对比 manifest 条目与 `raw_markdown/papers/<slug>.md` 的存在性，跳过已转换的 PDF。
 
 ---
 
-## 🗂️ Table of Contents
+## 🤖 多代理构建流水线
 
-| Document | Contents |
+`/wiki-build` 是核心。它以轮次为基础、文件交接为机制运行：
+
+```
+Phase 0  扫描 & 工作区设置
+Phase 1  PDF → raw_markdown（新论文）
+Phase 2  源页面——并行编写，轻量审查
+Phase 3  轮次计划——单个规划子代理产出页面列表与集群
+Phase 4  轮次执行
+           Stage A: 策展人（1 个子代理）——含大纲和抽查锚点的页面简报
+           Stage B: 集群编写者（并行）——维基百科式页面草稿
+           Stage C: 集群审查者（并行）——三镜头审查，附带裁决
+           Stage D: 修订者（并行）——应用修复列表；PASS 页面直接通过
+         根据需要重复第 2 轮和第 3 轮
+Phase 5  决定是否开启下一轮
+Phase 6  定稿——复制轮次输出到 wiki/，运行全面检查，更新索引
+```
+
+所有中间产物存放在 `agent_tasks/wikipedia-rewrite_<DATE><HHMM>/`。子代理通过写文件通信；编排器收集 ≤200 字的状态摘要。
+
+---
+
+## 🧠 核心设计原则
+
+### 角色分离
+
+> **LLM（编排器）** 规划、生成子代理、收集状态、决定修订/轮次继续。永不自己写维基内容。
+>
+> **LLM（子代理）** 策展简报、编写页面、审查页面、修订页面——仅文件交接，≤200 字状态返回。
+>
+> **脚本** 验证 Frontmatter、检查链接、检测孤立页面、导出元数据——仅确定性操作，不做学术判断。
+>
+> **研究者** 设定研究方向、挑选论文、在集群不合理时编辑轮次计划、校准最终页面的可信度。
+
+### 维基百科式综合，而非论文罗列
+
+每个综合页面必须满足以下硬性要求（详见 `.claude/skills/wiki-build/rubric.md`）：
+
+- **百科式引导段落**——定义主题、说明重要性、预览页面。不使用项目符号。
+- **主题骨干**——章节标题命名子主题、子问题、形式化模型组件——**而非论文**。没有「论文观点」章节。
+- **整合引用**——观点趋同时使用多重引用；仅在论文的独特贡献重要时才在行文中指名。
+- **三个知识层可见但不占主导**——论文声明通过行内 `[[slug]]`，跨论文模式通过斜体概括，当前评估通过简短标注块。
+
+---
+
+## 🗂️ 文档导航
+
+| 文档 | 内容 |
 |---|---|
-| [docs/llm-wiki.md](docs/llm-wiki.md) | Original inspiration by Andrej Karpathy |
-| [docs/architecture.md](docs/architecture.md) | Design principles, layer model, rationale |
-| [docs/quick-start.md](docs/quick-start.md) | Setup + first build walkthrough |
-| [docs/pipeline.md](docs/pipeline.md) | Complete PDF-to-wiki pipeline, step by step |
-| [docs/wiki-structure.md](docs/wiki-structure.md) | Wiki directory design and page types |
-| [docs/skills-reference.md](docs/skills-reference.md) | The four Claude Code skills |
-| [docs/scripts-reference.md](docs/scripts-reference.md) | The seven Python utility scripts |
-| [docs/obsidian-integration.md](docs/obsidian-integration.md) | Obsidian wikilinks and vault compatibility |
-| [docs/scale-up-guide.md](docs/scale-up-guide.md) | Multi-round rhythms and batch sizes |
-| [docs/adaptation-guide.md](docs/adaptation-guide.md) | Adapting for other research domains |
-| [docs/search-and-browse.md](docs/search-and-browse.md) | Zero-backend Search + Browse web UI |
-| [docs/web-frontend.md](docs/web-frontend.md) | Configuring and building the Next.js frontend (`web/`) |
-| [docs/rag-backend.md](docs/rag-backend.md) | The optional agentic chat backend — one OpenAI-compatible endpoint (`rag/`) |
-| [docs/deployment.md](docs/deployment.md) | Serving + deploying the web UI and API (Makefile, docker, launchd) |
-| [.claude/skills/wiki-build/rubric.md](.claude/skills/wiki-build/rubric.md) | **The Wikipedia-style quality bar** |
+| [docs/llm-wiki.md](docs/llm-wiki.md) | 原始灵感（Andrej Karpathy） |
+| [docs/architecture.md](docs/architecture.md) | 设计原则、分层模型、理念 |
+| [docs/quick-start.md](docs/quick-start.md) | 设置 + 首次构建指南 |
+| [docs/pipeline.md](docs/pipeline.md) | 完整 PDF 到维基流水线 |
+| [docs/wiki-structure.md](docs/wiki-structure.md) | 维基目录设计与页面类型 |
+| [docs/skills-reference.md](docs/skills-reference.md) | 四大技能参考 |
+| [docs/scripts-reference.md](docs/scripts-reference.md) | Python 工具脚本参考 |
+| [docs/obsidian-integration.md](docs/obsidian-integration.md) | Obsidian 集成 |
+| [docs/scale-up-guide.md](docs/scale-up-guide.md) | 规模化指南 |
+| [docs/adaptation-guide.md](docs/adaptation-guide.md) | 领域适配指南 |
+| [docs/search-and-browse.md](docs/search-and-browse.md) | 零后端搜索+浏览 Web 界面 |
+| [docs/web-frontend.md](docs/web-frontend.md) | Next.js 前端配置与构建 |
+| [docs/rag-backend.md](docs/rag-backend.md) | 可选的智能聊天后端 |
+| [docs/deployment.md](docs/deployment.md) | Web UI 和 API 部署指南 |
+| [.claude/skills/wiki-build/rubric.md](.claude/skills/wiki-build/rubric.md) | **维基百科式质量标准** |
 
 ---
 
-## 🚀 Quick Start
+## 🚀 快速开始
 
-If you are **new to the project**, start with:
+**新手上路：**
 
-1. [docs/quick-start.md](docs/quick-start.md) — get set up and run your first build
-2. [docs/architecture.md](docs/architecture.md) — understand why it is designed this way
-3. [.claude/skills/wiki-build/rubric.md](.claude/skills/wiki-build/rubric.md) — read the quality bar before writing anything
+1. [docs/quick-start.md](docs/quick-start.md) — 环境设置与首次构建
+2. [docs/architecture.md](docs/architecture.md) — 理解设计理念
+3. [.claude/skills/wiki-build/rubric.md](.claude/skills/wiki-build/rubric.md) — 编写前必读质量标准
 
-If you are **adding papers and building**, see:
+**添加论文并构建：**
 
-- [docs/pipeline.md](docs/pipeline.md) — full build pipeline reference
-- [docs/skills-reference.md](docs/skills-reference.md) — the four skills
+- [docs/pipeline.md](docs/pipeline.md) — 完整构建流水线参考
+- [docs/skills-reference.md](docs/skills-reference.md) — 四大技能
 
-If you are **maintaining the wiki**, see:
+**维基维护：**
 
-- [docs/scripts-reference.md](docs/scripts-reference.md) — lint and validation scripts
-- [docs/scale-up-guide.md](docs/scale-up-guide.md) — maintenance rhythm
+- [docs/scripts-reference.md](docs/scripts-reference.md) — 检查和验证脚本
+- [docs/scale-up-guide.md](docs/scale-up-guide.md) — 维护节奏
 
-If you are **adapting this for another domain**, see:
+**适配其他领域：**
 
-- [docs/adaptation-guide.md](docs/adaptation-guide.md) — what to change and what to keep
+- [docs/adaptation-guide.md](docs/adaptation-guide.md) — 改什么、留什么
 
 ---
 
-## 🌐 Quick Start — Run the Web UI
+## 🌐 Web 界面
 
-Once you have a built `wiki/`, stand up Search + Browse with **no AI and no backend**:
+构建完维基后，启动搜索 + 浏览界面（**无需 AI、无需后端**）：
 
 ```bash
-make install                     # python (rag/requirements.txt) + web (pnpm) deps
-python scripts/export_wiki.py    # → web/public/wiki-index.json (search index)
-make web-build                   # production build of the Next.js frontend
-make web-start                   # serve at http://localhost:3000  (Search + Browse only)
+make install
+python scripts/export_wiki.py
+make web-build
+make web-start   # http://localhost:3000 （搜索 + 浏览）
 ```
 
-To add the 💬 **Chat** surface (optional agentic search backend), build and serve everything in one shot — **no index to build**; the backend retrieves by navigating the filesystem live:
+加上聊天界面（可选，需要一个生成式端点）：
 
 ```bash
-python scripts/build_and_serve.py   # deterministic build + serve (API :8000 + web :3000)
+python scripts/build_and_serve.py   # API :8000 + Web :3000
 ```
 
-Configure branding and the generation endpoint in `.env` (copy from [.env.example](.env.example); `RAG_OPENAI_BASE_URL` defaults to local Ollama's `/v1`, or point it at any hosted OpenAI-compatible endpoint). The 🛟 graceful-degradation rule: if the Chat backend is down, Search and Browse keep working.
-
-> 📏 **Pages come out detailed by default.** `/wiki-build` now encodes a density/depth standard, so synthesis pages are richly developed unless the corpus is genuinely thin.
-
-> ⚠️ **Always restart the web server after a rebuild.** A running `next start` caches its build manifest in memory; overwriting `.next/` without restarting makes hashed CSS/JS 404 and renders every page unstyled. Full details in [docs/deployment.md](docs/deployment.md).
+在 `.env` 中配置品牌和生成端点（参考 `.env.example`）。
 
 ---
 
-## 🔗 Navigation Contract
+## 🔗 导航约定
 
-When an LLM agent enters this repository, the intended reading order is:
+当 LLM 代理进入此仓库，预期阅读顺序为：
 
-1. `CLAUDE.md` — project rules and automation boundary
-2. `/_index.md` — global repository navigation
-3. Subdirectory `_index.md` files — local routing before opening many pages in a directory
-4. `wiki/synthesis/` and `wiki/concepts/` — primary query targets (Wikipedia-style)
-5. `wiki/sources/` — paper-specific bibliographic detail when needed
-6. `raw_markdown/` — authoritative text when wiki coverage is insufficient or when reviewing
-7. `raw_pdfs/` — original evidence, only when necessary
-
-This reading order is why `_index.md` files exist at every level — they are router documents for agents.
+1. `CLAUDE.md` — 项目规则与自动化边界
+2. `/_index.md` — 全局仓库导航
+3. 子目录 `_index.md` 文件 — 目录路由
+4. `wiki/synthesis/` 和 `wiki/concepts/` — 主要查询目标
+5. `wiki/sources/` — 论文文献细节
+6. `raw_markdown/` — 权威转换文本
+7. `raw_pdfs/` — 原始证据
 
 ---
 
-*This documentation describes the literature-wiki system as a general-purpose framework. The original project description lives in the project `README.md` at the repository root.*
+## 📋 项目脚本清单
+
+| 脚本 | 功能 |
+|---|---|
+| `scripts/link_pdfs.py` | 扫描外部 PDF 目录，生成 `pdf_sources.json` 路径映射表；支持 `--convert` 批量转换和 `--new-only` 增量更新 |
+| `scripts/convert_pdf_to_markdown.py` | PDF → Markdown 转换（支持 `--converter markitdown` 和 `--converter mineru`） |
+| `scripts/pipeline_utils.py` | 共享工具函数（slug 生成、manifest 解析、路径解析、哈希计算） |
+| `scripts/check_links.py` | 断链检测 |
+| `scripts/check_orphans.py` | 孤立页面检测 |
+| `scripts/validate_frontmatter.py` | YAML Frontmatter 验证 |
+| `scripts/export_wiki.py` | 导出前端搜索索引 |
+| `scripts/export_metadata.py` | 导出元数据 |
+
+---
+
+*本仓库是一个通用文献维基模板。原始项目描述见项目根目录的 `README.md`。*
