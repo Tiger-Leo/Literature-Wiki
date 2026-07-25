@@ -1,0 +1,5 @@
+# Chat persistence (SQLite)
+threads.db
+
+# Python caches
+__pycache__/

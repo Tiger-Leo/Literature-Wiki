@@ -1,0 +1,19 @@
+# literature-wiki agentic-search chat backend — Python dependencies
+# Install:  pip install -r rag/requirements.txt
+# (Conda users: `conda activate <env>` first; do not create a new venv.)
+#
+# This backend answers ONLY via agentic filesystem navigation — there are NO
+# embeddings, vector store, BM25, graph index, or index build. The deps are just
+# the generation client, the HTTP API, frontmatter parsing, and thread storage.
+
+# --- Core (required) -------------------------------------------------------
+openai          # generation client — talks to ONE OpenAI-compatible endpoint
+                #   (hosted: OpenAI/DeepSeek/vLLM/OpenRouter/… ; local: Ollama's /v1)
+pyyaml          # frontmatter parsing (server /api/page; agent_tools.split_frontmatter)
+fastapi         # HTTP API
+uvicorn         # ASGI server (run the FastAPI app)
+aiosqlite       # async SQLite thread/message persistence
+
+# --- Optional system binary ------------------------------------------------
+# ripgrep (`rg`) — speeds up the agentic grep tool; a pure-Python regex
+# fallback is used automatically when it is not installed.

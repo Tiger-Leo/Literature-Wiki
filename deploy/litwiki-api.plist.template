@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  literature-wiki API LaunchAgent (macOS launchd) — TEMPLATE.
+  Fill the __PLACEHOLDERS__ (see deploy/README.md for a sed one-liner), then
+  copy to ~/Library/LaunchAgents/litwiki-api.plist and `launchctl load -w` it.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>litwiki.api</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>__PYTHON__</string>
+        <string>-m</string>
+        <string>uvicorn</string>
+        <string>rag.server:app</string>
+        <string>--host</string>
+        <string>0.0.0.0</string>
+        <string>--port</string>
+        <string>__API_PORT__</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>__REPO_ROOT__</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>__PATH__</string>
+        <key>LANG</key>
+        <string>en_US.UTF-8</string>
+        <key>LC_ALL</key>
+        <string>en_US.UTF-8</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <key>StandardOutPath</key>
+    <string>__LOG_DIR__/api.out.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>__LOG_DIR__/api.err.log</string>
+</dict>
+</plist>

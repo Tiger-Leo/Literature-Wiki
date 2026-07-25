@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+/*
+ * Gemini-inspired palette. Surfaces are set per-component with Tailwind
+ * `bg-[…] dark:bg-[…]` utilities; these CSS variables only provide the page
+ * background/foreground fallback (e.g. for the area behind the app shell and
+ * during the first paint) so light and dark themes never flash the wrong base.
+ */
+:root {
+  --background: #fdfcfc;
+  --foreground: #1f1f1f;
+  --color-scheme: light;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #131314;
+    --foreground: #e3e3e3;
+    --color-scheme: dark;
+  }
+}
+
+html {
+  color-scheme: var(--color-scheme);
+}
+
+/*
+ * Mobile "lock": stop iOS/Android rubber-band overscroll from drifting the page,
+ * and stop the OS from auto-inflating text (which silently re-zooms the layout).
+ * Pinch-zoom itself is disabled via the `viewport` export in layout.tsx.
+ */
+html,
+body {
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ---------------------------------------------------------------------------
+ * Obsidian-style callouts (see src/lib/callouts.ts).
+ * The remark plugin emits:
+ *   <div class="aui-callout aui-callout-{type}" data-callout="{type}">
+ *     <div class="aui-callout-title">Title</div>
+ *     …body…
+ *   </div>
+ * Default look = the "note" accent; per-type rules override the accent colour.
+ * Theme-aware via prefers-color-scheme.
+ * ------------------------------------------------------------------------- */
+.aui-callout {
+  --callout-accent: #4285f4; /* note / info (Gemini blue) */
+  --callout-tint: rgba(66, 133, 244, 0.08);
+  margin: 0.9rem 0;
+  border-radius: 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--callout-accent) 28%, transparent);
+  border-left: 3px solid var(--callout-accent);
+  background: var(--callout-tint);
+  padding: 0.7rem 0.9rem;
+}
+
+.aui-callout-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  color: color-mix(in srgb, var(--callout-accent) 78%, #1f1f1f);
+}
+
+.aui-callout-title::before {
+  content: "";
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 9999px;
+  background: var(--callout-accent);
+  flex: 0 0 auto;
+}
+
+/* Body spacing: tighten the first/last block so the box hugs its content. */
+.aui-callout > :not(.aui-callout-title) {
+  font-size: 0.95rem;
+}
+.aui-callout > .aui-callout-title + * {
+  margin-top: 0.35rem;
+}
+.aui-callout > :last-child {
+  margin-bottom: 0;
+}
+
+/* Per-type accents. */
+.aui-callout-tip,
+.aui-callout-hint,
+.aui-callout-success {
+  --callout-accent: #1a9d6f;
+  --callout-tint: rgba(26, 157, 111, 0.08);
+}
+.aui-callout-warning,
+.aui-callout-caution {
+  --callout-accent: #d99a00;
+  --callout-tint: rgba(217, 154, 0, 0.1);
+}
+.aui-callout-important,
+.aui-callout-danger,
+.aui-callout-error {
+  --callout-accent: #d93025;
+  --callout-tint: rgba(217, 48, 37, 0.09);
+}
+.aui-callout-question,
+.aui-callout-example,
+.aui-callout-abstract {
+  --callout-accent: #9b72cb;
+  --callout-tint: rgba(155, 114, 203, 0.09);
+}
+
+@media (prefers-color-scheme: dark) {
+  .aui-callout {
+    --callout-tint: rgba(66, 133, 244, 0.12);
+  }
+  .aui-callout-title {
+    color: color-mix(in srgb, var(--callout-accent) 60%, #ffffff);
+  }
+  .aui-callout-tip,
+  .aui-callout-hint,
+  .aui-callout-success {
+    --callout-tint: rgba(26, 157, 111, 0.14);
+  }
+  .aui-callout-warning,
+  .aui-callout-caution {
+    --callout-tint: rgba(217, 154, 0, 0.15);
+  }
+  .aui-callout-important,
+  .aui-callout-danger,
+  .aui-callout-error {
+    --callout-tint: rgba(217, 48, 37, 0.16);
+  }
+  .aui-callout-question,
+  .aui-callout-example,
+  .aui-callout-abstract {
+    --callout-tint: rgba(155, 114, 203, 0.16);
+  }
+}

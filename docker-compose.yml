@@ -1,0 +1,59 @@
+# docker-compose.yml — portable two-service deployment of literature-wiki.
+#
+#   api : FastAPI / uvicorn agentic-search chat backend (rag/) on :8000
+#   web : Next.js frontend (web/) on :3000
+#
+# The backend answers ONLY by agentic filesystem navigation — there is NO
+# embedding index and NO index-build step. Just bring the two services up:
+#   docker compose up --build
+#
+# The generation endpoint is EXTERNAL — not containerised here. The backend talks
+# to ONE OpenAI-compatible endpoint via RAG_OPENAI_BASE_URL. Either:
+#   (a) run Ollama on the host (it serves the OpenAI protocol at /v1) and set
+#       RAG_OPENAI_BASE_URL=http://host.docker.internal:11434/v1 in .env
+#       (the api service maps host.docker.internal below for Linux), or
+#   (b) point RAG_OPENAI_BASE_URL/_API_KEY at a hosted endpoint (OpenAI, DeepSeek, …).
+
+services:
+  api:
+    image: python:3.12-slim
+    working_dir: /app
+    command: >
+      sh -c "pip install --no-cache-dir -r rag/requirements.txt &&
+             uvicorn rag.server:app --host 0.0.0.0 --port 8000"
+    volumes:
+      - ./:/app                       # mount repo (wiki/, rag/, raw_markdown/)
+    ports:
+      - "${RAG_PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      # Default to an Ollama on the host via its OpenAI-compatible /v1 endpoint.
+      # Override RAG_OPENAI_BASE_URL/_API_KEY/RAG_GEN_MODEL in .env for a hosted model.
+      RAG_OPENAI_BASE_URL: ${RAG_OPENAI_BASE_URL:-http://host.docker.internal:11434/v1}
+      RAG_HOST: 0.0.0.0
+      RAG_PORT: "8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # Linux: resolve the host endpoint
+
+  web:
+    image: node:22-slim
+    working_dir: /app/web
+    command: >
+      sh -c "corepack enable &&
+             pnpm install &&
+             pnpm build &&
+             pnpm start -H 0.0.0.0 -p 3000"
+    volumes:
+      - ./web:/app/web
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      # The browser talks to the api service via the host-published port.
+      # If serving cross-host, set NEXT_PUBLIC_API_URL in .env to the public API URL.
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:${RAG_PORT:-8000}}
+      NEXT_PUBLIC_BACKEND_PORT: ${NEXT_PUBLIC_BACKEND_PORT:-8000}
+    depends_on:
+      - api

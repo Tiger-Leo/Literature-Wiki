@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  literature-wiki Web LaunchAgent (macOS launchd) — TEMPLATE.
+  Serves the PRODUCTION build (`next start`), so run `pnpm build` first and
+  re-run it + `launchctl kickstart` whenever frontend code or NEXT_PUBLIC_*
+  env changes. Fill the __PLACEHOLDERS__ (see deploy/README.md), then copy to
+  ~/Library/LaunchAgents/litwiki-web.plist and `launchctl load -w` it.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>litwiki.web</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>__NODE__</string>
+        <string>__REPO_ROOT__/web/node_modules/next/dist/bin/next</string>
+        <string>start</string>
+        <string>-H</string>
+        <string>0.0.0.0</string>
+        <string>-p</string>
+        <string>__WEB_PORT__</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>__REPO_ROOT__/web</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>__PATH__</string>
+        <key>NODE_ENV</key>
+        <string>production</string>
+        <key>NODE_OPTIONS</key>
+        <string></string>
+        <key>LANG</key>
+        <string>en_US.UTF-8</string>
+        <key>LC_ALL</key>
+        <string>en_US.UTF-8</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <key>StandardOutPath</key>
+    <string>__LOG_DIR__/web.out.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>__LOG_DIR__/web.err.log</string>
+</dict>
+</plist>
