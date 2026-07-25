@@ -8,6 +8,57 @@ A ready-to-use template for building an AI-native literature wiki from a collect
 
 ---
 
+## ⚡ Quick Commands
+
+> Frequently-used commands, placed up front for easy reference.
+
+### One-time Setup
+
+```powershell
+# Link your PDF directory to the project. Replace <your-pdf-dir> with your actual path.
+# Examples: e:\Papers, D:\literature\journals, /home/user/papers, etc.
+python scripts/link_pdfs.py "<your-pdf-dir>" --mode manifest
+```
+
+### PDF Management (external PDFs — no copying or moving source files)
+
+```powershell
+# Link an external PDF directory (generates the path-mapping manifest)
+python scripts/link_pdfs.py "<your-pdf-dir>" --mode manifest
+
+# Batch convert all PDFs via MinerU cloud API (high quality)
+python scripts/link_pdfs.py "<your-pdf-dir>" --mode manifest --convert
+
+# Incremental: convert only newly-added PDFs (daily use)
+python scripts/link_pdfs.py "<your-pdf-dir>" --mode manifest --convert --new-only
+
+# Convert a single PDF
+python scripts/convert_pdf_to_markdown.py "Author and Author - YYYY - Title.pdf" --converter mineru --overwrite
+```
+
+### Wiki Build & Maintenance
+
+```bash
+/wiki-build          # Default 2-round multi-agent build
+/wiki-build 3        # 3 rounds for deeper corpora
+/wiki-query          # Answer research questions from the wiki layer
+/wiki-synthesis      # Save a one-off insight as a single page
+/wiki-update-db      # Lint, validate, and maintain the wiki
+/wiki-serve          # Build search index and serve web UI
+```
+
+### Validation Scripts
+
+```bash
+python -m py_compile scripts/*.py                         # Compile check
+python scripts/check_links.py wiki raw_markdown           # Broken links
+python scripts/check_orphans.py wiki                      # Orphan pages
+python scripts/validate_frontmatter.py wiki               # Frontmatter validation
+python scripts/export_wiki.py --wiki-dir wiki             # Export search index
+```
+
+---
+
 ## 🧭 What Is This?
 
 An **AI-native literature wiki** that transforms a collection of academic PDFs into a set of focused **Wikipedia-style synthesis pages** — each centered on one topic (concept, debate, mechanism, measure, method, or theme) and integrating evidence from across the whole collection.

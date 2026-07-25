@@ -14,17 +14,25 @@
 
 > 这是日常使用最频繁的命令，放在最前面方便查阅。
 
+### 首次配置（一次性）
+
+```powershell
+# 将你的 PDF 目录链接到项目。将 <你的PDF目录> 替换为实际路径即可。
+# 例如：e:\Papers、D:\文献\期刊、/home/user/papers 等。
+python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest
+```
+
 ### PDF 管理（外部 PDF，无需复制或移动源文件）
 
 ```powershell
 # 将外部 PDF 目录链接到项目（生成路径映射表）
-python scripts/link_pdfs.py "e:\Desktop\Desktop\test" --mode manifest
+python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest
 
 # 批量转换全部 PDF 为 Markdown（MinerU 云端 API，高质量）
-python scripts/link_pdfs.py "e:\Desktop\Desktop\test" --mode manifest --convert
+python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest --convert
 
 # 增量更新：只转换新增的 PDF（日常最常用）
-python scripts/link_pdfs.py "e:\Desktop\Desktop\test" --mode manifest --convert --new-only
+python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest --convert --new-only
 
 # 单篇转换（指定转换器）
 python scripts/convert_pdf_to_markdown.py "Author and Author - YYYY - Title.pdf" --converter mineru --overwrite
@@ -140,10 +148,10 @@ wiki/
 
 ```
                      ┌──────────────────────┐
-                     │  e:\Desktop\test\    │  ← PDF 真实存放位置
-                     │  ├── JPE/            │     （按期刊分类，不动）
-                     │  ├── RES/            │
-                     │  └── ...             │
+                     │  <你的PDF目录>\       │  ← PDF 真实存放位置
+                     │  ├── 期刊A/           │     （按期刊/主题分类，不动）
+                     │  ├── 期刊B/           │
+                     │  └── ...              │
                      └────────┬─────────────┘
                               │
                 link_pdfs.py --mode manifest
@@ -170,7 +178,7 @@ wiki/
 添加新 PDF 后，运行 `--convert --new-only` 自动检测并仅转换新文件：
 
 ```powershell
-python scripts/link_pdfs.py "e:\Desktop\Desktop\test" --mode manifest --convert --new-only
+python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest --convert --new-only
 ```
 
 脚本对比 manifest 条目与 `raw_markdown/papers/<slug>.md` 的存在性，跳过已转换的 PDF。
