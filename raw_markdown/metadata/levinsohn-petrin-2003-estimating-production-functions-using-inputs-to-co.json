@@ -1,0 +1,33 @@
+{
+  "canonical_slug": "levinsohn-petrin-2003-estimating-production-functions-using-inputs-to-co",
+  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Levinsohn_Petrin_2003_Estimating Production Functions Using Inputs to Co.pdf",
+  "source_pdf_name": "Levinsohn Petrin - 2003 - Estimating Production Functions Using Inputs to Co.pdf",
+  "markdown_file": "raw_markdown/papers/levinsohn-petrin-2003-estimating-production-functions-using-inputs-to-co.md",
+  "metadata_file": "raw_markdown/metadata/levinsohn-petrin-2003-estimating-production-functions-using-inputs-to-co.json",
+  "conversion_tool": "mineru",
+  "conversion_command": [
+    "python",
+    "C:\\Users\\pc\\.claude\\skills\\mineru-pdf-converter\\scripts\\mineru_convert.py",
+    "--input",
+    "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Levinsohn_Petrin_2003_Estimating Production Functions Using Inputs to Co.pdf",
+    "--output-dir",
+    "C:\\Users\\pc\\AppData\\Local\\Temp\\mineru_46km1w2v",
+    "--language",
+    "en"
+  ],
+  "converted_at": "2026-07-25T18:50:57+08:00",
+  "source_sha256": "38334b1a8c678b1322e5d48fc924dbe8c7753305947732268bb28ea0d6879d0c",
+  "source_size_bytes": 2632265,
+  "markdown_size_bytes": 91939,
+  "line_count": 681,
+  "heading_count": 28,
+  "word_count": 12740,
+  "title_guess": "Estimating Production Functions Using Inputs to Co",
+  "authors_guess": "Levinsohn Petrin",
+  "year_guess": "2003",
+  "conversion_notes": [],
+  "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_46km1w2v\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"41f4806c-ff30-4de4-9b12-cf2381a3e2a6\"\n}",
+  "mineru_stderr": "",
+  "markitdown_stdout": "",
+  "markitdown_stderr": ""
+}

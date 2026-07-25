@@ -1,0 +1,33 @@
+{
+  "canonical_slug": "jones-2009-the-burden-of-knowledge-and-the-death-of-the-rena",
+  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Jones_2009_The Burden of Knowledge and the \u201cDeath of the Rena.pdf",
+  "source_pdf_name": "Jones - 2009 - The Burden of Knowledge and the Death of the Rena.pdf",
+  "markdown_file": "raw_markdown/papers/jones-2009-the-burden-of-knowledge-and-the-death-of-the-rena.md",
+  "metadata_file": "raw_markdown/metadata/jones-2009-the-burden-of-knowledge-and-the-death-of-the-rena.json",
+  "conversion_tool": "mineru",
+  "conversion_command": [
+    "python",
+    "C:\\Users\\pc\\.claude\\skills\\mineru-pdf-converter\\scripts\\mineru_convert.py",
+    "--input",
+    "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Jones_2009_The Burden of Knowledge and the \u201cDeath of the Rena.pdf",
+    "--output-dir",
+    "C:\\Users\\pc\\AppData\\Local\\Temp\\mineru_4_2nsjke",
+    "--language",
+    "en"
+  ],
+  "converted_at": "2026-07-25T18:47:57+08:00",
+  "source_sha256": "8deb7a1b496d2cd7d486d0268cca244e2846015f8458650bce1f7fa30ad8c016",
+  "source_size_bytes": 4999129,
+  "markdown_size_bytes": 145952,
+  "line_count": 849,
+  "heading_count": 18,
+  "word_count": 18918,
+  "title_guess": "The Burden of Knowledge and the Death of the Rena",
+  "authors_guess": "Jones",
+  "year_guess": "2009",
+  "conversion_notes": [],
+  "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_4_2nsjke\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"a50814d7-c4f6-45fb-8112-2340a8228fb5\"\n}",
+  "mineru_stderr": "",
+  "markitdown_stdout": "",
+  "markitdown_stderr": ""
+}

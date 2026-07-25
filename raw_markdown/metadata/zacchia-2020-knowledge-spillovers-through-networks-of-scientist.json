@@ -1,0 +1,33 @@
+{
+  "canonical_slug": "zacchia-2020-knowledge-spillovers-through-networks-of-scientist",
+  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Zacchia_2020_Knowledge Spillovers through Networks of Scientist.pdf",
+  "source_pdf_name": "Zacchia - 2020 - Knowledge Spillovers through Networks of Scientist.pdf",
+  "markdown_file": "raw_markdown/papers/zacchia-2020-knowledge-spillovers-through-networks-of-scientist.md",
+  "metadata_file": "raw_markdown/metadata/zacchia-2020-knowledge-spillovers-through-networks-of-scientist.json",
+  "conversion_tool": "mineru",
+  "conversion_command": [
+    "python",
+    "C:\\Users\\pc\\.claude\\skills\\mineru-pdf-converter\\scripts\\mineru_convert.py",
+    "--input",
+    "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Zacchia_2020_Knowledge Spillovers through Networks of Scientist.pdf",
+    "--output-dir",
+    "C:\\Users\\pc\\AppData\\Local\\Temp\\mineru_gz7u643r",
+    "--language",
+    "en"
+  ],
+  "converted_at": "2026-07-25T18:54:24+08:00",
+  "source_sha256": "c69b6346b3cbc92afb62fc057299503b4310606a33a32973593a1cfe6deedd07",
+  "source_size_bytes": 944772,
+  "markdown_size_bytes": 109081,
+  "line_count": 533,
+  "heading_count": 21,
+  "word_count": 15679,
+  "title_guess": "Knowledge Spillovers through Networks of Scientist",
+  "authors_guess": "Zacchia",
+  "year_guess": "2020",
+  "conversion_notes": [],
+  "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_gz7u643r\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"e3e18364-e679-4140-b607-27224f0d2e3e\"\n}",
+  "mineru_stderr": "",
+  "markitdown_stdout": "",
+  "markitdown_stderr": ""
+}

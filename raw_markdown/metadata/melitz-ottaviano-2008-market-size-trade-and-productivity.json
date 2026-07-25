@@ -1,0 +1,33 @@
+{
+  "canonical_slug": "melitz-ottaviano-2008-market-size-trade-and-productivity",
+  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Melitz_Ottaviano_2008_Market Size, Trade, and Productivity.pdf",
+  "source_pdf_name": "Melitz Ottaviano - 2008 - Market Size, Trade, and Productivity.pdf",
+  "markdown_file": "raw_markdown/papers/melitz-ottaviano-2008-market-size-trade-and-productivity.md",
+  "metadata_file": "raw_markdown/metadata/melitz-ottaviano-2008-market-size-trade-and-productivity.json",
+  "conversion_tool": "mineru",
+  "conversion_command": [
+    "python",
+    "C:\\Users\\pc\\.claude\\skills\\mineru-pdf-converter\\scripts\\mineru_convert.py",
+    "--input",
+    "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Melitz_Ottaviano_2008_Market Size, Trade, and Productivity.pdf",
+    "--output-dir",
+    "C:\\Users\\pc\\AppData\\Local\\Temp\\mineru_uus6qmdo",
+    "--language",
+    "en"
+  ],
+  "converted_at": "2026-07-25T19:01:26+08:00",
+  "source_sha256": "af2a82274de8c759e27e33ac5878b4c00591faac221b47600c253756565ca956",
+  "source_size_bytes": 183178,
+  "markdown_size_bytes": 84605,
+  "line_count": 703,
+  "heading_count": 28,
+  "word_count": 13281,
+  "title_guess": "Market Size, Trade, and Productivity",
+  "authors_guess": "Melitz Ottaviano",
+  "year_guess": "2008",
+  "conversion_notes": [],
+  "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_uus6qmdo\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"5a92daeb-3a5d-46e9-a2bc-e733574ef6fb\"\n}",
+  "mineru_stderr": "",
+  "markitdown_stdout": "",
+  "markitdown_stderr": ""
+}

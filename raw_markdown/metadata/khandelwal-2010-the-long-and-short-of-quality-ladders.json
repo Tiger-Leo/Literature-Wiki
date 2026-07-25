@@ -1,0 +1,33 @@
+{
+  "canonical_slug": "khandelwal-2010-the-long-and-short-of-quality-ladders",
+  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Khandelwal_2010_The Long and Short (of) Quality Ladders.pdf",
+  "source_pdf_name": "Khandelwal - 2010 - The Long and Short (of) Quality Ladders.pdf",
+  "markdown_file": "raw_markdown/papers/khandelwal-2010-the-long-and-short-of-quality-ladders.md",
+  "metadata_file": "raw_markdown/metadata/khandelwal-2010-the-long-and-short-of-quality-ladders.json",
+  "conversion_tool": "mineru",
+  "conversion_command": [
+    "python",
+    "C:\\Users\\pc\\.claude\\skills\\mineru-pdf-converter\\scripts\\mineru_convert.py",
+    "--input",
+    "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Khandelwal_2010_The Long and Short (of) Quality Ladders.pdf",
+    "--output-dir",
+    "C:\\Users\\pc\\AppData\\Local\\Temp\\mineru_56fkwjod",
+    "--language",
+    "en"
+  ],
+  "converted_at": "2026-07-25T18:49:02+08:00",
+  "source_sha256": "d2bb54d2e1aa8bf51e088249f98c7168a20f720f73a877d0a92f56090e0cb837",
+  "source_size_bytes": 638608,
+  "markdown_size_bytes": 102408,
+  "line_count": 516,
+  "heading_count": 12,
+  "word_count": 12999,
+  "title_guess": "The Long and Short (of) Quality Ladders",
+  "authors_guess": "Khandelwal",
+  "year_guess": "2010",
+  "conversion_notes": [],
+  "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_56fkwjod\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"4f6be1aa-743e-4337-ba8c-3b4582f500ec\"\n}",
+  "mineru_stderr": "",
+  "markitdown_stdout": "",
+  "markitdown_stderr": ""
+}

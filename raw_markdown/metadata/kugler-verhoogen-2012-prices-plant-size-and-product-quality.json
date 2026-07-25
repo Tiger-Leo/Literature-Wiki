@@ -1,0 +1,33 @@
+{
+  "canonical_slug": "kugler-verhoogen-2012-prices-plant-size-and-product-quality",
+  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Kugler_Verhoogen_2012_Prices, Plant Size, and Product Quality.pdf",
+  "source_pdf_name": "Kugler Verhoogen - 2012 - Prices, Plant Size, and Product Quality.pdf",
+  "markdown_file": "raw_markdown/papers/kugler-verhoogen-2012-prices-plant-size-and-product-quality.md",
+  "metadata_file": "raw_markdown/metadata/kugler-verhoogen-2012-prices-plant-size-and-product-quality.json",
+  "conversion_tool": "mineru",
+  "conversion_command": [
+    "python",
+    "C:\\Users\\pc\\.claude\\skills\\mineru-pdf-converter\\scripts\\mineru_convert.py",
+    "--input",
+    "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Kugler_Verhoogen_2012_Prices, Plant Size, and Product Quality.pdf",
+    "--output-dir",
+    "C:\\Users\\pc\\AppData\\Local\\Temp\\mineru_ccqks65z",
+    "--language",
+    "en"
+  ],
+  "converted_at": "2026-07-25T18:50:15+08:00",
+  "source_sha256": "3c9a3b9821a3d944fbb882f66113ec2735ce47374e0a3141ce4269678a2e681e",
+  "source_size_bytes": 4035594,
+  "markdown_size_bytes": 118506,
+  "line_count": 654,
+  "heading_count": 17,
+  "word_count": 16322,
+  "title_guess": "Prices, Plant Size, and Product Quality",
+  "authors_guess": "Kugler Verhoogen",
+  "year_guess": "2012",
+  "conversion_notes": [],
+  "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_ccqks65z\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"c9c922e0-4b3e-4832-8312-3086e69fb7e0\"\n}",
+  "mineru_stderr": "",
+  "markitdown_stdout": "",
+  "markitdown_stderr": ""
+}

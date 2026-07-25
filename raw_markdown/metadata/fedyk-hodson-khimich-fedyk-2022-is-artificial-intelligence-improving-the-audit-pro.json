@@ -1,0 +1,33 @@
+{
+  "canonical_slug": "fedyk-hodson-khimich-fedyk-2022-is-artificial-intelligence-improving-the-audit-pro",
+  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Accounting Studies\\Fedyk_Hodson_Khimich_Fedyk_2022_Is Artificial Intelligence Improving the Audit Pro.pdf",
+  "source_pdf_name": "Fedyk Hodson Khimich Fedyk - 2022 - Is Artificial Intelligence Improving the Audit Pro.pdf",
+  "markdown_file": "raw_markdown/papers/fedyk-hodson-khimich-fedyk-2022-is-artificial-intelligence-improving-the-audit-pro.md",
+  "metadata_file": "raw_markdown/metadata/fedyk-hodson-khimich-fedyk-2022-is-artificial-intelligence-improving-the-audit-pro.json",
+  "conversion_tool": "mineru",
+  "conversion_command": [
+    "python",
+    "C:\\Users\\pc\\.claude\\skills\\mineru-pdf-converter\\scripts\\mineru_convert.py",
+    "--input",
+    "E:\\Desktop\\Desktop\\test\\Review of Accounting Studies\\Fedyk_Hodson_Khimich_Fedyk_2022_Is Artificial Intelligence Improving the Audit Pro.pdf",
+    "--output-dir",
+    "C:\\Users\\pc\\AppData\\Local\\Temp\\mineru_y6mmcuxf",
+    "--language",
+    "en"
+  ],
+  "converted_at": "2026-07-25T18:45:10+08:00",
+  "source_sha256": "c3301a27de27e711e38d0639664cf89b401e35d1f469e03a42508bcf38e51c5a",
+  "source_size_bytes": 913749,
+  "markdown_size_bytes": 154291,
+  "line_count": 544,
+  "heading_count": 27,
+  "word_count": 18014,
+  "title_guess": "Is Artificial Intelligence Improving the Audit Pro",
+  "authors_guess": "Fedyk Hodson Khimich Fedyk",
+  "year_guess": "2022",
+  "conversion_notes": [],
+  "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_y6mmcuxf\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"7f8306d0-3635-40aa-9f8a-62f25b85ef5a\"\n}",
+  "mineru_stderr": "",
+  "markitdown_stdout": "",
+  "markitdown_stderr": ""
+}
