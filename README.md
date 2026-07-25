@@ -59,6 +59,13 @@ python scripts/validate_frontmatter.py wiki               # Frontmatter 验证
 python scripts/export_wiki.py --wiki-dir wiki             # 导出搜索索引
 ```
 
+### 查看转换器来源
+
+```bash
+# 查看所有 Markdown 文件分别使用了哪个转换器（mineru / markitdown / pdftotext）
+python -c "import json,glob;[print(f'{json.load(open(f))[\"canonical_slug\"]:55s} {json.load(open(f))[\"conversion_tool\"]}') for f in sorted(glob.glob('raw_markdown/metadata/*.json'))]"
+```
+
 ---
 
 ## 🧭 这是什么？

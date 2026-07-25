@@ -57,6 +57,13 @@ python scripts/validate_frontmatter.py wiki               # Frontmatter validati
 python scripts/export_wiki.py --wiki-dir wiki             # Export search index
 ```
 
+### Check Converter Source
+
+```bash
+# Show which converter was used for each markdown file (mineru / markitdown / pdftotext)
+python -c "import json,glob;[print(f'{json.load(open(f))[\"canonical_slug\"]:55s} {json.load(open(f))[\"conversion_tool\"]}') for f in sorted(glob.glob('raw_markdown/metadata/*.json'))]"
+```
+
 ---
 
 ## 🧭 What Is This?
