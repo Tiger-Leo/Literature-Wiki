@@ -1,5 +1,7 @@
 # 📚 Literature Wiki
 
+[![中文](https://img.shields.io/badge/Readme-中文-red)](README_zh.md)
+
 A ready-to-use template for building an AI-native literature wiki from a collection of academic PDFs — using Claude Code as the orchestrator that builds and maintains it via a multi-round, multi-agent pipeline.
 
 > **Inspired by** [karpathy/llm-wiki](https://github.com/karpathy/llm-wiki): *"Instead of just retrieving from raw documents at query time, the LLM incrementally builds and maintains a persistent wiki… The knowledge is compiled once and then kept current, not re-derived on every query."*
