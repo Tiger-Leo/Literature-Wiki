@@ -62,3 +62,6 @@ web/public/wiki-index.json
 
 # deterministic build/serve script logs
 .build_and_serve*.log
+
+# MCP server config (personal to each researcher)
+.mcp.json
