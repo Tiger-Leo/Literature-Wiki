@@ -40,7 +40,7 @@ Global navigation entry point for agents and humans.
 
 ## Current Status
 
-- Papers ingested: 0
+- Papers ingested: 13
 - Last build: —
 - Last lint: —
 - Last synthesis: —

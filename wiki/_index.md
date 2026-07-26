@@ -15,7 +15,6 @@ The canonical knowledge layer. LLM-maintained.
 | `measures/` | Measure pages | How key variables are operationalized |
 | `debates/` | Debate pages | Competing claims and open tensions |
 | `synthesis/` | Synthesis pages | Higher-level cumulative interpretations |
-| `inbox/` | Draft pages | Staging area before promotion to sources/ |
 | `templates/` | Templates | Page structure templates |
 | `schema/` | Schema docs | Naming rules, frontmatter schema, workflow docs |
 

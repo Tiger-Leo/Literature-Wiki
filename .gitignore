@@ -65,3 +65,10 @@ web/public/wiki-index.json
 
 # MCP server config (personal to each researcher)
 .mcp.json
+
+# Sensitive files
+.env.*
+.envrc
+*.pem
+*.key
+~/.codex/

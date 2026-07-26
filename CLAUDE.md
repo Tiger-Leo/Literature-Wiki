@@ -1,6 +1,7 @@
 ---
 purpose: Entry point for Claude Code agents bootstrapping a new literature wiki
 audience: LLM agents and researchers setting up a wiki for the first time
+repo: https://github.com/Tiger-Leo/Literature-Wiki
 ---
 
 # Literature Wiki — Agent Setup Guide
