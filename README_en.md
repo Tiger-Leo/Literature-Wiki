@@ -36,6 +36,22 @@ python scripts/link_pdfs.py "<your-pdf-dir>" --mode manifest --convert --new-onl
 python scripts/convert_pdf_to_markdown.py "Author and Author - YYYY - Title.pdf" --converter mineru --overwrite
 ```
 
+### Zotero Semantic Search
+
+```powershell
+# Incrementally update semantic search database (run after adding new papers; auto-runs daily at 2:00 AM)
+zotero-mcp update-db
+
+# Check database status
+zotero-mcp db-status
+
+# Force full rebuild (use when switching embedding models or repairing the database)
+zotero-mcp update-db --force-rebuild
+
+# Incremental update with fulltext extraction (more comprehensive, slower)
+zotero-mcp update-db --fulltext
+```
+
 ### Wiki Build & Maintenance
 
 ```bash

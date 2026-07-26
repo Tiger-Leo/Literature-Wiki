@@ -38,6 +38,22 @@ python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest --convert --new-
 python scripts/convert_pdf_to_markdown.py "Author and Author - YYYY - Title.pdf" --converter mineru --overwrite
 ```
 
+### Zotero 语义搜索
+
+```powershell
+# 增量更新语义搜索数据库（新增论文后运行；每天凌晨2:00自动执行）
+zotero-mcp update-db
+
+# 查看数据库状态
+zotero-mcp db-status
+
+# 强制全量重建（更换嵌入模型或修复数据库时使用）
+zotero-mcp update-db --force-rebuild
+
+# 含全文提取的增量更新（更全面，但较慢）
+zotero-mcp update-db --fulltext
+```
+
 ### 维基构建与维护
 
 ```bash
