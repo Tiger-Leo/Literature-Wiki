@@ -28,6 +28,9 @@ python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest
 # 将外部 PDF 目录链接到项目（生成路径映射表）
 python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest
 
+# 排除某些子目录（可多次使用 --exclude）
+python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest --exclude "<你的PDF目录>\不想读的文件夹"
+
 # 批量转换全部 PDF 为 Markdown（MinerU 云端 API，高质量）
 python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest --convert
 
@@ -196,6 +199,35 @@ wiki/
 
 源 PDF 文件名为 `Author1_Author2_YYYY_Title.pdf`（下划线分隔），脚本自动转换为项目规范 `Author1 Author2 - YYYY - Title.pdf`（` - ` 分隔）。中文「等」自动替换为「et al」。
 
+### 排除目录
+
+源目录下可能有不想纳入维基的文件夹（如草稿、临时归档等）。有两种方式排除：
+
+**方式 A：`--exclude` 命令行参数（推荐，效果立即可见）**
+
+```powershell
+python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest --exclude "<你的PDF目录>\20260726" --exclude "<你的PDF目录>\momo"
+```
+
+可多次使用 `--exclude`，每次指定一个目录。脚本扫描时跳过这些目录下的所有 PDF。
+
+**方式 B：直接编辑 `pdf_sources.json`（持久化，后续扫描自动生效）**
+
+在 `exclude_dirs` 数组中添加路径：
+
+```json
+{
+  "source_dirs": ["E:\\Desktop\\Desktop\\test"],
+  "exclude_dirs": [
+    "E:\\Desktop\\Desktop\\test\\20260726",
+    "E:\\Desktop\\Desktop\\test\\momo"
+  ],
+  "pdfs": { ... }
+}
+```
+
+两种方式可配合使用——JSON 中保存常规排除项，命令行 `--exclude` 用于临时排除。重新运行 manifest 扫描时，JSON 中已有的 `exclude_dirs` 会自动保留并与新的 `--exclude` 合并。
+
 ### 增量更新
 
 添加新 PDF 后，运行 `--convert --new-only` 自动检测并仅转换新文件：
@@ -339,7 +371,7 @@ python scripts/build_and_serve.py   # API :8000 + Web :3000
 
 | 脚本 | 功能 |
 |---|---|
-| `scripts/link_pdfs.py` | 扫描外部 PDF 目录，生成 `pdf_sources.json` 路径映射表；支持 `--convert` 批量转换和 `--new-only` 增量更新 |
+| `scripts/link_pdfs.py` | 扫描外部 PDF 目录，生成 `pdf_sources.json` 路径映射表；支持 `--exclude` 排除子目录、`--convert` 批量转换和 `--new-only` 增量更新 |
 | `scripts/convert_pdf_to_markdown.py` | PDF → Markdown 转换（支持 `--converter markitdown` 和 `--converter mineru`） |
 | `scripts/pipeline_utils.py` | 共享工具函数（slug 生成、manifest 解析、路径解析、哈希计算） |
 | `scripts/check_links.py` | 断链检测 |

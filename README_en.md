@@ -26,6 +26,9 @@ python scripts/link_pdfs.py "<your-pdf-dir>" --mode manifest
 # Link an external PDF directory (generates the path-mapping manifest)
 python scripts/link_pdfs.py "<your-pdf-dir>" --mode manifest
 
+# Exclude subdirectories you don't want to scan (repeatable)
+python scripts/link_pdfs.py "<your-pdf-dir>" --mode manifest --exclude "<your-pdf-dir>\unwanted-folder"
+
 # Batch convert all PDFs via MinerU cloud API (high quality)
 python scripts/link_pdfs.py "<your-pdf-dir>" --mode manifest --convert
 
