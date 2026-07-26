@@ -87,12 +87,38 @@ def create_symlink(target: Path, link: Path) -> bool:
 MANIFEST_FILENAME = "pdf_sources.json"
 
 
-def generate_manifest(source_dir: Path, manifest_path: Path, source_dirs: list[str]) -> dict:
+def _is_excluded(pdf_path: Path, source_dir: Path, exclude_dirs: set[str]) -> bool:
+    """Return True if *pdf_path* is under any excluded directory."""
+    if not exclude_dirs:
+        return False
+    resolved = pdf_path.resolve()
+    for excl in exclude_dirs:
+        excl_path = Path(excl).resolve()
+        try:
+            if resolved.is_relative_to(excl_path):
+                return True
+        except (ValueError, OSError):
+            # Different drives or invalid path — can't be excluded
+            pass
+    return False
+
+
+def generate_manifest(
+    source_dir: Path,
+    manifest_path: Path,
+    source_dirs: list[str],
+    exclude_dirs: set[str] | None = None,
+) -> dict:
     """Build or update a pdf_sources.json manifest from a source directory.
 
     Returns the complete manifest dict (old entries from other source dirs
     are preserved; entries from this source dir are refreshed).
+
+    Directories in *exclude_dirs* are skipped during scanning.
     """
+    if exclude_dirs is None:
+        exclude_dirs = set()
+
     # Load existing manifest to preserve entries from other source dirs
     existing: dict[str, dict[str, str]] = {}
     if manifest_path.exists():
@@ -101,16 +127,30 @@ def generate_manifest(source_dir: Path, manifest_path: Path, source_dirs: list[s
         except (json.JSONDecodeError, KeyError):
             existing = {}
 
+    # Merge exclude_dirs from the existing manifest with those passed in
+    all_excludes = set(exclude_dirs)
+    for excl in existing.get("exclude_dirs", []):
+        all_excludes.add(excl)
+
     # Build fresh map for this source_dir
     fresh: dict[str, str] = {}
     source_dir_str = str(source_dir.resolve())
+    scanned = 0
+    skipped = 0
     for pdf_path in sorted(source_dir.rglob("*.pdf")):
+        if _is_excluded(pdf_path, source_dir, all_excludes):
+            skipped += 1
+            continue
+        scanned += 1
         normalized = normalize_filename(pdf_path.name)
         if normalized in fresh:
             print(f"  WARNING: duplicate normalized name '{normalized}' — "
                   f"keeping first: {fresh[normalized]}")
             continue
         fresh[normalized] = str(pdf_path.resolve())
+
+    if skipped:
+        print(f"  Excluded {skipped} PDF(s) under excluded directories")
 
     # Merge: fresh entries from this source_dir, keep entries from elsewhere
     merged_pdfs: dict[str, str] = {}
@@ -130,6 +170,7 @@ def generate_manifest(source_dir: Path, manifest_path: Path, source_dirs: list[s
 
     return {
         "source_dirs": sorted(all_source_dirs),
+        "exclude_dirs": sorted(all_excludes),
         "pdfs": merged_pdfs,
     }
 
@@ -158,6 +199,14 @@ def build_parser() -> argparse.ArgumentParser:
         "--dry-run",
         action="store_true",
         help="Show what would be done without writing anything.",
+    )
+    parser.add_argument(
+        "--exclude",
+        action="append",
+        default=[],
+        dest="exclude_dirs",
+        help="Directory path to exclude from scanning. Can be passed multiple "
+             "times. Use to skip subdirectories you don't want to include.",
     )
     parser.add_argument(
         "--convert",
@@ -194,6 +243,7 @@ def main() -> int:
             dry_run=args.dry_run,
             do_convert=args.convert,
             new_only=args.new_only,
+            exclude_dirs=set(args.exclude_dirs),
         )
     else:
         return _run_symlink_mode(link_dir, pdf_paths, args.dry_run)
@@ -206,7 +256,10 @@ def _run_manifest_mode(
     dry_run: bool = False,
     do_convert: bool = False,
     new_only: bool = False,
+    exclude_dirs: set[str] | None = None,
 ) -> int:
+    if exclude_dirs is None:
+        exclude_dirs = set()
     manifest_path = link_dir / MANIFEST_FILENAME
     print(f"Manifest: {manifest_path}")
     if dry_run:
@@ -214,8 +267,11 @@ def _run_manifest_mode(
     else:
         print()
 
-    manifest = generate_manifest(source_dir, manifest_path,
-                                 source_dirs=[str(source_dir.resolve())])
+    manifest = generate_manifest(
+        source_dir, manifest_path,
+        source_dirs=[str(source_dir.resolve())],
+        exclude_dirs=exclude_dirs,
+    )
 
     shown = 0
     for name, path in manifest["pdfs"].items():

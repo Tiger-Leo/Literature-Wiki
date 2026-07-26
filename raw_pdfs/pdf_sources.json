@@ -2,6 +2,10 @@
   "source_dirs": [
     "E:\\Desktop\\Desktop\\test"
   ],
+  "exclude_dirs": [
+    "E:\\Desktop\\Desktop\\test\\20260726",
+    "E:\\Desktop\\Desktop\\test\\momo"
+  ],
   "pdfs": {
     "Hall Helmers - 2024 - Strategic Patenting, Patent Portfolio Races, and P.pdf": "E:\\Desktop\\Desktop\\test\\Oxford University PressNew York\\Hall_Helmers_2024_Strategic Patenting, Patent Portfolio Races, and P.pdf",
     "Fedyk Hodson Khimich Fedyk - 2022 - Is Artificial Intelligence Improving the Audit Pro.pdf": "E:\\Desktop\\Desktop\\test\\Review of Accounting Studies\\Fedyk_Hodson_Khimich_Fedyk_2022_Is Artificial Intelligence Improving the Audit Pro.pdf",
