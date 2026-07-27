@@ -42,7 +42,7 @@ python scripts/convert_pdf_to_markdown.py "Author and Author - YYYY - Title.pdf"
 ### Zotero Semantic Search
 
 ```powershell
-# Incrementally update semantic search database (run after adding new papers; auto-runs daily at 2:00 AM)
+# Incrementally update semantic search database (run after adding new papers; auto-runs every Monday at 10:00 PM)
 zotero-mcp update-db
 
 # Check database status

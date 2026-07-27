@@ -44,7 +44,7 @@ python scripts/convert_pdf_to_markdown.py "Author and Author - YYYY - Title.pdf"
 ### Zotero 语义搜索
 
 ```powershell
-# 增量更新语义搜索数据库（新增论文后运行；每天凌晨2:00自动执行）
+# 增量更新语义搜索数据库（新增论文后运行；每周一晚上22:00自动执行）
 zotero-mcp update-db
 
 # 查看数据库状态
