@@ -55,6 +55,39 @@ zotero-mcp update-db --force-rebuild
 zotero-mcp update-db --fulltext
 ```
 
+#### Scheduled Task Requirements
+
+> The semantic search database auto-update runs via **Windows Task Scheduler** under the name `Zotero Semantic Search DB Update`.
+
+**Prerequisites:**
+
+| Condition | Notes |
+|---|---|
+| **Zotero desktop running** | Local mode (`ZOTERO_LOCAL: true`) requires Zotero desktop. Recommended: add Zotero to startup |
+| **Internet access** | The embedding API (SiliconFlow `BAAI/bge-m3`) needs external network |
+| **User logged in** | Task runs in "Interactive only" mode — the current user must be signed in |
+| **Computer not sleeping** | Task won't execute during sleep. `StartWhenAvailable` will catch up after wake |
+
+**Manual setup:**
+
+```powershell
+# Create a scheduled task that runs every Monday at 10:00 PM
+$action = New-ScheduledTaskAction -Execute "C:\Users\pc\miniconda3\Scripts\zotero-mcp.exe" -Argument "update-db"
+$trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday -At "22:00"
+$principal = New-ScheduledTaskPrincipal -UserId "$env:USERNAME" -LogonType Interactive
+$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Hours 72) -MultipleInstances IgnoreNew -Compatibility Win8
+Register-ScheduledTask -TaskName "Zotero Semantic Search DB Update" -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description "Weekly incremental update of Zotero semantic search database"
+
+# Check task status
+schtasks /query /tn "Zotero Semantic Search DB Update" /fo LIST
+```
+
+**Troubleshooting:**
+
+- Last result = `1` (failure) → check if Zotero desktop was running
+- Manual test: `zotero-mcp update-db`
+- Check database status: `zotero-mcp db-status`
+
 ### Wiki Build & Maintenance
 
 ```bash

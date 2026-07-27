@@ -57,6 +57,39 @@ zotero-mcp update-db --force-rebuild
 zotero-mcp update-db --fulltext
 ```
 
+#### 定时任务要求
+
+> 语义搜索数据库的自动更新通过 **Windows 任务计划程序**（Task Scheduler）实现，任务名为 `Zotero Semantic Search DB Update`。
+
+**必要条件：**
+
+| 条件 | 说明 |
+|---|---|
+| **Zotero 桌面版运行中** | 本地模式（`ZOTERO_LOCAL: true`）需要 Zotero 桌面端运行。建议将 Zotero 设为开机自启 |
+| **网络畅通** | 嵌入 API（SiliconFlow `BAAI/bge-m3`）需要外网访问 |
+| **用户已登录** | 任务以「仅交互式」模式运行，需当前用户已登录 Windows |
+| **计算机不处于休眠** | 休眠状态下任务不会执行。错过调度后 `StartWhenAvailable` 会补跑 |
+
+**手动创建/修改定时任务：**
+
+```powershell
+# 创建每周一 22:00 执行的定时任务
+$action = New-ScheduledTaskAction -Execute "C:\Users\pc\miniconda3\Scripts\zotero-mcp.exe" -Argument "update-db"
+$trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday -At "22:00"
+$principal = New-ScheduledTaskPrincipal -UserId "$env:USERNAME" -LogonType Interactive
+$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Hours 72) -MultipleInstances IgnoreNew -Compatibility Win8
+Register-ScheduledTask -TaskName "Zotero Semantic Search DB Update" -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description "每周一晚上10点增量更新 Zotero 语义搜索数据库"
+
+# 查看任务状态
+schtasks /query /tn "Zotero Semantic Search DB Update" /fo LIST
+```
+
+**故障排查：**
+
+- 上次运行结果为 `1`（失败）→ 检查 Zotero 桌面端是否在运行
+- 手动测试：`zotero-mcp update-db`
+- 查看数据库状态：`zotero-mcp db-status`
+
 ### 维基构建与维护
 
 ```bash
