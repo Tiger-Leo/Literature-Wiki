@@ -44,7 +44,7 @@ Global navigation entry point for agents and humans.
 - Last build: —
 - Last lint: —
 - Last synthesis: —
-- Last config: 2026-07-28
+- Last config: 2026-07-28 (manifest adjusted — 13 PDFs verified consistent)
 
 *Update this section after each major wiki operation.*
 
