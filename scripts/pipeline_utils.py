@@ -28,6 +28,28 @@ def ascii_slugify(text: str) -> str:
     return text or "untitled"
 
 
+def _is_cjk(ch: str) -> bool:
+    """Return True if *ch* is a CJK Unified Ideograph."""
+    return '一' <= ch <= '鿿'
+
+
+def manifest_sort_key(name: str) -> tuple[int, str]:
+    """Sort key for manifest entries: Chinese (pinyin) first, then English.
+
+    Returns ``(0, pinyin_lower)`` for Chinese names, ``(1, name_lower)`` for English,
+    so Chinese entries sort before English entries.
+    """
+    if any(_is_cjk(c) for c in name):
+        try:
+            from pypinyin import lazy_pinyin  # type: ignore[import-untyped]
+        except ImportError:
+            return (0, name.lower())
+        pinyin = ''.join(lazy_pinyin(name, errors='ignore')).lower()
+        return (0, pinyin)
+    else:
+        return (1, name.lower())
+
+
 def parse_pdf_filename(pdf_path: str | Path) -> dict[str, str]:
     """Extract a best-effort authors/year/title guess from a paper filename.
 
@@ -103,9 +125,21 @@ def relative_to_repo(path: Path) -> str:
 _MANIFEST_CACHE: dict[str, str] | None = None
 
 
+def _manifest_value_path(value: str | dict) -> str:
+    """Extract the file-system path from a manifest entry value.
+
+    Handles both legacy format (plain string) and current format
+    (dict with a ``path`` key).
+    """
+    if isinstance(value, str):
+        return value
+    return value["path"]
+
+
 def load_pdf_manifest(repo_root: Path | None = None) -> dict[str, str]:
     """Load ``raw_pdfs/pdf_sources.json``, returning ``{name: real_path}``.
 
+    Handles both legacy (string value) and current (dict value) formats.
     The result is cached in-process so repeated calls don't re-read the file.
     Pass a different *repo_root* to bypass the cache.
     """
@@ -116,7 +150,8 @@ def load_pdf_manifest(repo_root: Path | None = None) -> dict[str, str]:
         if not manifest_path.exists():
             return {}
         data = json.loads(manifest_path.read_text(encoding="utf-8"))
-        return data.get("pdfs", {})
+        raw = data.get("pdfs", {})
+        return {k: _manifest_value_path(v) for k, v in raw.items()}
 
     if _MANIFEST_CACHE is not None:
         return _MANIFEST_CACHE
@@ -127,7 +162,8 @@ def load_pdf_manifest(repo_root: Path | None = None) -> dict[str, str]:
         return _MANIFEST_CACHE
 
     data = json.loads(manifest_path.read_text(encoding="utf-8"))
-    _MANIFEST_CACHE = data.get("pdfs", {})
+    raw = data.get("pdfs", {})
+    _MANIFEST_CACHE = {k: _manifest_value_path(v) for k, v in raw.items()}
     return _MANIFEST_CACHE
 
 

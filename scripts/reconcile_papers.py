@@ -22,11 +22,16 @@ METADATA_DIR = REPO_ROOT / "raw_markdown" / "metadata"
 with open(MANIFEST_PATH, encoding="utf-8") as f:
     manifest = json.load(f)
 
-# Build slug→(key, path) map from manifest
+def _entry_path(value):
+    return value if isinstance(value, str) else value["path"]
+
+# Build slug→(key, value) map from manifest
 slug_to_manifest = {}
-for key, path in manifest["pdfs"].items():
+for key, value in manifest["pdfs"].items():
     slug = canonical_slug_from_filename(key)
-    slug_to_manifest[slug] = (key, path)
+    slug_to_manifest[slug] = (key, value)
+
+manifest_modified = False
 
 print(f"Manifest: {len(manifest['pdfs'])} entries, {len(slug_to_manifest)} unique slugs")
 print()
@@ -40,7 +45,14 @@ for md_path in sorted(PAPERS_DIR.glob("*.md")):
     meta_path = METADATA_DIR / f"{slug}.json"
 
     if slug in slug_to_manifest:
-        manifest_key, manifest_path = slug_to_manifest[slug]
+        manifest_key, manifest_value = slug_to_manifest[slug]
+        manifest_path = _entry_path(manifest_value)
+
+        # Mark entry as converted in the manifest
+        if isinstance(manifest["pdfs"][manifest_key], dict):
+            if not manifest["pdfs"][manifest_key].get("converted"):
+                manifest["pdfs"][manifest_key]["converted"] = True
+                manifest_modified = True
 
         if meta_path.exists():
             with open(meta_path, encoding="utf-8") as f:
@@ -69,6 +81,17 @@ for md_path in sorted(PAPERS_DIR.glob("*.md")):
     else:
         print(f"  NOT FOUND in manifest: {slug}")
         not_found += 1
+
+# Write back manifest if converted flags were updated
+if manifest_modified:
+    from pipeline_utils import manifest_sort_key
+    manifest["pdfs"] = dict(
+        sorted(manifest["pdfs"].items(), key=lambda kv: manifest_sort_key(kv[0]))
+    )
+    with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    print(f"\nUpdated converted flags in manifest.")
 
 print(f"\n--- Summary ---")
 print(f"Updated: {updated}")

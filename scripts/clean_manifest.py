@@ -10,10 +10,13 @@ with open(MANIFEST_PATH, encoding="utf-8") as f:
 old_count = len(manifest["pdfs"])
 
 # Remove entries pointing to the old test directory (E:\Desktop\Desktop\test\)
+def _entry_path(value):
+    return value if isinstance(value, str) else value["path"]
+
 manifest["pdfs"] = {
-    key: path
-    for key, path in manifest["pdfs"].items()
-    if "Desktop" not in path and "test" not in Path(path).parts
+    key: value
+    for key, value in manifest["pdfs"].items()
+    if "Desktop" not in _entry_path(value) and "test" not in Path(_entry_path(value)).parts
 }
 
 # Deduplicate source_dirs (keep only the real literature directory)

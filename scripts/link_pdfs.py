@@ -126,8 +126,12 @@ def generate_manifest(
     for excl in existing.get("exclude_dirs", []):
         all_excludes.add(excl)
 
-    # Build fresh map for this source_dir
-    fresh: dict[str, str] = {}
+    # Helper: extract just the path from either old (string) or new (dict) format
+    def _entry_path(value: str | dict) -> str:
+        return value if isinstance(value, str) else value["path"]
+
+    # Build fresh map for this source_dir (new object format)
+    fresh: dict[str, dict] = {}
     source_dir_str = str(source_dir.resolve())
     scanned = 0
     skipped = 0
@@ -139,23 +143,42 @@ def generate_manifest(
         normalized = normalize_filename(pdf_path.name)
         if normalized in fresh:
             print(f"  WARNING: duplicate normalized name '{normalized}' — "
-                  f"keeping first: {fresh[normalized]}")
+                  f"keeping first: {fresh[normalized]['path']}")
             continue
-        fresh[normalized] = str(pdf_path.resolve())
+        slug = canonical_slug_from_filename(normalized)
+        fresh[normalized] = {
+            "path": str(pdf_path.resolve()),
+            "slug": slug,
+            "converted": False,
+        }
 
     if skipped:
         print(f"  Excluded {skipped} PDF(s) under excluded directories")
 
     # Merge: fresh entries from this source_dir, keep entries from elsewhere
-    merged_pdfs: dict[str, str] = {}
-    for name, path in existing.get("pdfs", {}).items():
-        merged_pdfs[name] = path
+    # Preserve existing dict entries and their converted status
+    merged_pdfs: dict[str, dict] = {}
+    for name, value in existing.get("pdfs", {}).items():
+        if isinstance(value, str):
+            # Legacy format — upgrade to object format
+            merged_pdfs[name] = {
+                "path": value,
+                "slug": canonical_slug_from_filename(name),
+                "converted": False,
+            }
+        else:
+            merged_pdfs[name] = value
 
     # Remove entries that were previously from this source_dir (will be refreshed)
-    for name, path in list(merged_pdfs.items()):
-        if Path(path).resolve().is_relative_to(source_dir.resolve()):
+    for name, value in list(merged_pdfs.items()):
+        if Path(_entry_path(value)).resolve().is_relative_to(source_dir.resolve()):
             del merged_pdfs[name]
 
+    # Merge fresh entries — preserve converted status of any existing entry with same name
+    for name, info in fresh.items():
+        if name in merged_pdfs:
+            # Keep the existing converted status
+            info["converted"] = merged_pdfs[name].get("converted", False)
     merged_pdfs.update(fresh)
 
     # Rebuild source_dirs list
@@ -278,6 +301,11 @@ def _run_manifest_mode(
             shown += 1
 
     if not dry_run:
+        # Sort: Chinese (pinyin) first, English alphabetical after
+        from pipeline_utils import manifest_sort_key
+        manifest["pdfs"] = dict(
+            sorted(manifest["pdfs"].items(), key=lambda kv: manifest_sort_key(kv[0]))
+        )
         manifest_path.write_text(
             json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",

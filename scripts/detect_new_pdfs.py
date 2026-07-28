@@ -46,9 +46,14 @@ def scan_source_dir(source_dir: str, exclude_dirs: list[str]) -> set[str]:
     return result
 
 
+def _entry_path(value: str | dict) -> str:
+    """Extract path from either legacy (string) or current (dict) format."""
+    return value if isinstance(value, str) else value["path"]
+
+
 def detect(manifest: dict, source_dir: str, exclude_dirs: list[str]) -> dict:
     """Return {new: [...], removed: [...], unchanged: N}."""
-    manifest_paths = set(manifest["pdfs"].values())
+    manifest_paths = {_entry_path(v) for v in manifest["pdfs"].values()}
     actual_paths = scan_source_dir(source_dir, exclude_dirs)
 
     new = sorted(actual_paths - manifest_paths)
@@ -99,10 +104,21 @@ def update_manifest(manifest: dict, new_pdfs: list[str]) -> int:
         if norm in manifest["pdfs"]:
             # Collision — keep existing
             continue
-        manifest["pdfs"][norm] = pdf_path
+        slug = canonical_slug_from_filename(norm)
+        md_exists = (PAPERS_DIR / f"{slug}.md").exists()
+        manifest["pdfs"][norm] = {
+            "path": pdf_path,
+            "slug": slug,
+            "converted": md_exists,
+        }
         added += 1
 
     if added:
+        # Sort: Chinese (pinyin) first, English alphabetical after
+        from pipeline_utils import manifest_sort_key
+        manifest["pdfs"] = dict(
+            sorted(manifest["pdfs"].items(), key=lambda kv: manifest_sort_key(kv[0]))
+        )
         with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
             json.dump(manifest, f, indent=2, ensure_ascii=False)
             f.write("\n")
