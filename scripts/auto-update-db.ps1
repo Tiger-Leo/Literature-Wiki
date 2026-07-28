@@ -93,7 +93,7 @@ try {
 
     # ── Show a reminder in the Claude Code session ──────────────────
     Write-Output ""
-    Write-Output "📚 Zotero 语义搜索数据库正在后台更新（zotero-mcp update-db --fulltext）"
+    Write-Output "📚 请打开 Zotero 语义搜索数据库进行后台更新（zotero-mcp update-db --fulltext）"
     Write-Output "   本周: $weekKey  |  时间: $timestamp  |  PID: $($proc.Id)"
     Write-Output "   查看进度: Get-Content .cache/zotero-db-update.log -Tail 20"
     Write-Output ""
