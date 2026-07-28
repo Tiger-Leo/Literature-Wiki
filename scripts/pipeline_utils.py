@@ -16,12 +16,14 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 def ascii_slugify(text: str) -> str:
-    """Convert arbitrary text into lowercase kebab-case ASCII."""
-
+    """Convert arbitrary text into lowercase kebab-case, preserving CJK characters."""
     text = unicodedata.normalize("NFKD", text)
-    text = text.encode("ascii", "ignore").decode("ascii")
+    # Remove combining diacritical marks (e.g. í → i + ´ → i)
+    text = re.sub(r"[̀-ͯ]+", "", text)
     text = text.lower().strip()
-    text = re.sub(r"[^a-z0-9]+", "-", text)
+    # Preserve ASCII alphanumerics AND CJK Unified Ideographs (U+4E00–U+9FFF)
+    # Everything else becomes a hyphen separator.
+    text = re.sub(r"[^a-z0-9一-鿿]+", "-", text)
     text = re.sub(r"-+", "-", text).strip("-")
     return text or "untitled"
 
