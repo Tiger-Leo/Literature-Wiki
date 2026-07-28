@@ -44,8 +44,8 @@ python scripts/convert_pdf_to_markdown.py "Author and Author - YYYY - Title.pdf"
 ### Zotero 语义搜索
 
 ```powershell
-# 增量更新语义搜索数据库（新增论文后运行；每周一晚上22:00自动执行）
-zotero-mcp update-db
+# 增量更新语义搜索数据库（新增论文后运行；每周一晚上22:00后打开项目时自动执行，含全文提取）
+zotero-mcp update-db --fulltext
 
 # 查看数据库状态
 zotero-mcp db-status
@@ -57,9 +57,17 @@ zotero-mcp update-db --force-rebuild
 zotero-mcp update-db --fulltext
 ```
 
-#### 定时任务要求
+#### 自动更新机制
 
-> 语义搜索数据库的自动更新通过 **Windows 任务计划程序**（Task Scheduler）实现，任务名为 `Zotero Semantic Search DB Update`。
+> 语义搜索数据库的自动更新通过 **Claude Code SessionStart 钩子**实现。每次在该项目中启动 Claude Code 会话时，会自动检查是否是周一晚上 22:00 之后且本周尚未更新——若满足条件，则在后台自动运行 `zotero-mcp update-db --fulltext`。每周只运行一次（按 ISO 周编号记录）。
+
+**工作流程：**
+
+1. 打开本项目的 Claude Code 会话
+2. `SessionStart` 钩子触发 → 运行 `scripts/auto-update-db.ps1`
+3. 脚本检测：（a）是否周一？（b）≥ 22:00 北京时间？（c）本周已运行过？
+4. 三项均满足 → 后台启动 `zotero-mcp update-db --fulltext`，写入 `.cache/zotero-db-update-week.txt` 标记
+5. 更新在后台运行，不阻塞会话
 
 **必要条件：**
 
@@ -67,28 +75,22 @@ zotero-mcp update-db --fulltext
 |---|---|
 | **Zotero 桌面版运行中** | 本地模式（`ZOTERO_LOCAL: true`）需要 Zotero 桌面端运行。建议将 Zotero 设为开机自启 |
 | **网络畅通** | 嵌入 API（SiliconFlow `BAAI/bge-m3`）需要外网访问 |
-| **用户已登录** | 任务以「仅交互式」模式运行，需当前用户已登录 Windows |
-| **计算机不处于休眠** | 休眠状态下任务不会执行。错过调度后 `StartWhenAvailable` 会补跑 |
+| **钩子已配置** | 项目 `.claude/settings.local.json` 中已配置 `SessionStart` 钩子 |
 
-**手动创建/修改定时任务：**
+**手动运行（覆盖自动机制）：**
 
 ```powershell
-# 创建每周一 22:00 执行的定时任务
-$action = New-ScheduledTaskAction -Execute "C:\Users\pc\miniconda3\Scripts\zotero-mcp.exe" -Argument "update-db"
-$trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday -At "22:00"
-$principal = New-ScheduledTaskPrincipal -UserId "$env:USERNAME" -LogonType Interactive
-$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Hours 72) -MultipleInstances IgnoreNew -Compatibility Win8
-Register-ScheduledTask -TaskName "Zotero Semantic Search DB Update" -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description "每周一晚上10点增量更新 Zotero 语义搜索数据库"
-
-# 查看任务状态
-schtasks /query /tn "Zotero Semantic Search DB Update" /fo LIST
+zotero-mcp update-db              # 增量更新
+zotero-mcp update-db --fulltext   # 含全文提取
+zotero-mcp update-db --force-rebuild  # 全量重建
 ```
 
 **故障排查：**
 
-- 上次运行结果为 `1`（失败）→ 检查 Zotero 桌面端是否在运行
-- 手动测试：`zotero-mcp update-db`
-- 查看数据库状态：`zotero-mcp db-status`
+- 自动更新未触发 → 检查是否为周一 22:00 后首次打开项目；查看 `.cache/zotero-db-update-week.txt` 中的周编号
+- 钩子未执行 → 检查 `.claude/settings.local.json` 中 `hooks.SessionStart` 配置是否存在
+- 更新失败 → 手动运行 `zotero-mcp update-db`；确保 Zotero 桌面端在运行
+- 查看后台更新日志：`Get-Content .cache/zotero-db-update.log`
 
 ### 维基构建与维护
 

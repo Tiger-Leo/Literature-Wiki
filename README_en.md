@@ -42,8 +42,8 @@ python scripts/convert_pdf_to_markdown.py "Author and Author - YYYY - Title.pdf"
 ### Zotero Semantic Search
 
 ```powershell
-# Incrementally update semantic search database (run after adding new papers; auto-runs every Monday at 10:00 PM)
-zotero-mcp update-db
+# Incrementally update semantic search database (run after adding new papers; auto-runs when project opened after 10:00 PM Monday, with fulltext extraction)
+zotero-mcp update-db --fulltext
 
 # Check database status
 zotero-mcp db-status
@@ -55,9 +55,17 @@ zotero-mcp update-db --force-rebuild
 zotero-mcp update-db --fulltext
 ```
 
-#### Scheduled Task Requirements
+#### Auto-Update Mechanism
 
-> The semantic search database auto-update runs via **Windows Task Scheduler** under the name `Zotero Semantic Search DB Update`.
+> The semantic search database auto-update runs via a **Claude Code SessionStart hook**. Every time you open a Claude Code session in this project, it checks whether it's Monday after 10:00 PM and the update hasn't been done this ISO week — if so, it launches `zotero-mcp update-db --fulltext` in the background. Runs at most once per week.
+
+**How it works:**
+
+1. Open a Claude Code session in this project
+2. `SessionStart` hook fires → runs `scripts/auto-update-db.ps1`
+3. Script checks: (a) Is it Monday? (b) ≥ 22:00 Beijing time? (c) Already done this week?
+4. All three true → background launch `zotero-mcp update-db --fulltext`, write `.cache/zotero-db-update-week.txt`
+5. Update runs in background; session not blocked
 
 **Prerequisites:**
 
@@ -65,28 +73,22 @@ zotero-mcp update-db --fulltext
 |---|---|
 | **Zotero desktop running** | Local mode (`ZOTERO_LOCAL: true`) requires Zotero desktop. Recommended: add Zotero to startup |
 | **Internet access** | The embedding API (SiliconFlow `BAAI/bge-m3`) needs external network |
-| **User logged in** | Task runs in "Interactive only" mode — the current user must be signed in |
-| **Computer not sleeping** | Task won't execute during sleep. `StartWhenAvailable` will catch up after wake |
+| **Hook configured** | `SessionStart` hook is configured in project `.claude/settings.local.json` |
 
-**Manual setup:**
+**Manual run (bypasses auto mechanism):**
 
 ```powershell
-# Create a scheduled task that runs every Monday at 10:00 PM
-$action = New-ScheduledTaskAction -Execute "C:\Users\pc\miniconda3\Scripts\zotero-mcp.exe" -Argument "update-db"
-$trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday -At "22:00"
-$principal = New-ScheduledTaskPrincipal -UserId "$env:USERNAME" -LogonType Interactive
-$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Hours 72) -MultipleInstances IgnoreNew -Compatibility Win8
-Register-ScheduledTask -TaskName "Zotero Semantic Search DB Update" -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description "Weekly incremental update of Zotero semantic search database"
-
-# Check task status
-schtasks /query /tn "Zotero Semantic Search DB Update" /fo LIST
+zotero-mcp update-db              # incremental update
+zotero-mcp update-db --fulltext   # with fulltext extraction
+zotero-mcp update-db --force-rebuild  # full rebuild
 ```
 
 **Troubleshooting:**
 
-- Last result = `1` (failure) → check if Zotero desktop was running
-- Manual test: `zotero-mcp update-db`
-- Check database status: `zotero-mcp db-status`
+- Auto-update not triggered → check Monday + after 22:00 + first session this week; inspect `.cache/zotero-db-update-week.txt`
+- Hook not executing → verify `hooks.SessionStart` config exists in `.claude/settings.local.json`
+- Update failed → run `zotero-mcp update-db` manually; ensure Zotero desktop is running
+- View background update log: `Get-Content .cache/zotero-db-update.log`
 
 ### Wiki Build & Maintenance
 
