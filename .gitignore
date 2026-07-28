@@ -33,7 +33,7 @@ raw_markdown/assets/*.jpeg
 # exports/
 
 # Agent task temp files
-agent_tasks/*/
+agent_tasks/
 !agent_tasks/.gitkeep
 
 # Frontend (web/) — Next.js
