@@ -22,7 +22,7 @@ env/
 *.swo
 
 # Raw PDFs (optional — commit or not depending on size and licensing)
-raw_pdfs/*.pdf
+raw_pdfs/
 
 # Large assets
 raw_markdown/assets/*.png
