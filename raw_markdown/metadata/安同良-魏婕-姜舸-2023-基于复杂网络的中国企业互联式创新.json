@@ -1,0 +1,33 @@
+{
+  "canonical_slug": "\u5b89\u540c\u826f-\u9b4f\u5a55-\u59dc\u8238-2023-\u57fa\u4e8e\u590d\u6742\u7f51\u7edc\u7684\u4e2d\u56fd\u4f01\u4e1a\u4e92\u8054\u5f0f\u521b\u65b0",
+  "source_pdf": "C:\\Users\\pc\\OneDrive\\\u3010\u6211\u7684\u79d1\u7814\u3011\\literature\\\u4e2d\u56fd\u793e\u4f1a\u79d1\u5b66\\\u5b89\u540c\u826f_\u9b4f\u5a55_\u59dc\u8238_2023_\u57fa\u4e8e\u590d\u6742\u7f51\u7edc\u7684\u4e2d\u56fd\u4f01\u4e1a\u4e92\u8054\u5f0f\u521b\u65b0.pdf",
+  "source_pdf_name": "\u5b89\u540c\u826f \u9b4f\u5a55 \u59dc\u8238 - 2023 - \u57fa\u4e8e\u590d\u6742\u7f51\u7edc\u7684\u4e2d\u56fd\u4f01\u4e1a\u4e92\u8054\u5f0f\u521b\u65b0.pdf",
+  "markdown_file": "raw_markdown/papers/\u5b89\u540c\u826f-\u9b4f\u5a55-\u59dc\u8238-2023-\u57fa\u4e8e\u590d\u6742\u7f51\u7edc\u7684\u4e2d\u56fd\u4f01\u4e1a\u4e92\u8054\u5f0f\u521b\u65b0.md",
+  "metadata_file": "raw_markdown/metadata/\u5b89\u540c\u826f-\u9b4f\u5a55-\u59dc\u8238-2023-\u57fa\u4e8e\u590d\u6742\u7f51\u7edc\u7684\u4e2d\u56fd\u4f01\u4e1a\u4e92\u8054\u5f0f\u521b\u65b0.json",
+  "conversion_tool": "mineru",
+  "conversion_command": [
+    "python",
+    "C:\\Users\\pc\\.claude\\skills\\mineru-pdf-converter\\scripts\\mineru_convert.py",
+    "--input",
+    "C:\\Users\\pc\\OneDrive\\\u3010\u6211\u7684\u79d1\u7814\u3011\\literature\\\u4e2d\u56fd\u793e\u4f1a\u79d1\u5b66\\\u5b89\u540c\u826f_\u9b4f\u5a55_\u59dc\u8238_2023_\u57fa\u4e8e\u590d\u6742\u7f51\u7edc\u7684\u4e2d\u56fd\u4f01\u4e1a\u4e92\u8054\u5f0f\u521b\u65b0.pdf",
+    "--output-dir",
+    "C:\\Users\\pc\\AppData\\Local\\Temp\\mineru_xtu1e664",
+    "--language",
+    "ch"
+  ],
+  "converted_at": "2026-07-28T21:56:00+08:00",
+  "source_sha256": "8b0d14b2e2aec5229c2128b997a0d47c7a6377b4fe54a0dd26aaf650b26e74fa",
+  "source_size_bytes": 2079840,
+  "markdown_size_bytes": 57555,
+  "line_count": 288,
+  "heading_count": 19,
+  "word_count": 2338,
+  "title_guess": "\u57fa\u4e8e\u590d\u6742\u7f51\u7edc\u7684\u4e2d\u56fd\u4f01\u4e1a\u4e92\u8054\u5f0f\u521b\u65b0",
+  "authors_guess": "\u5b89\u540c\u826f \u9b4f\u5a55 \u59dc\u8238",
+  "year_guess": "2023",
+  "conversion_notes": [],
+  "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_xtu1e664\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"53a16b62-73c1-4898-9fad-a8fb8203418b\"\n}",
+  "mineru_stderr": "",
+  "markitdown_stdout": "",
+  "markitdown_stderr": ""
+}

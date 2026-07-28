@@ -1,0 +1,33 @@
+{
+  "canonical_slug": "\u5b89\u540c\u826f-\u5434\u81f4\u51b6-2025-\u4f01\u4e1a\u4eba\u5de5\u667a\u80fd\u6280\u672f\u6c34\u5e73\u7684\u5206\u5c42\u6d4b\u5ea6\u53ca\u5176\u521b\u65b0\u6548\u5e94-\u57fa\u4e8e\u5168\u7403\u77e5\u8bc6\u7f51\u7edc\u89c6\u89d2",
+  "source_pdf": "C:\\Users\\pc\\OneDrive\\\u3010\u6211\u7684\u79d1\u7814\u3011\\literature\\\u4e2d\u56fd\u5de5\u4e1a\u7ecf\u6d4e\\\u5b89\u540c\u826f_\u5434\u81f4\u51b6_2025_\u4f01\u4e1a\u4eba\u5de5\u667a\u80fd\u6280\u672f\u6c34\u5e73\u7684\u5206\u5c42\u6d4b\u5ea6\u53ca\u5176\u521b\u65b0\u6548\u5e94\u2014\u2014\u57fa\u4e8e\u5168\u7403\u77e5\u8bc6\u7f51\u7edc\u89c6\u89d2.pdf",
+  "source_pdf_name": "\u5b89\u540c\u826f \u5434\u81f4\u51b6 - 2025 - \u4f01\u4e1a\u4eba\u5de5\u667a\u80fd\u6280\u672f\u6c34\u5e73\u7684\u5206\u5c42\u6d4b\u5ea6\u53ca\u5176\u521b\u65b0\u6548\u5e94\u2014\u2014\u57fa\u4e8e\u5168\u7403\u77e5\u8bc6\u7f51\u7edc\u89c6\u89d2.pdf",
+  "markdown_file": "raw_markdown/papers/\u5b89\u540c\u826f-\u5434\u81f4\u51b6-2025-\u4f01\u4e1a\u4eba\u5de5\u667a\u80fd\u6280\u672f\u6c34\u5e73\u7684\u5206\u5c42\u6d4b\u5ea6\u53ca\u5176\u521b\u65b0\u6548\u5e94-\u57fa\u4e8e\u5168\u7403\u77e5\u8bc6\u7f51\u7edc\u89c6\u89d2.md",
+  "metadata_file": "raw_markdown/metadata/\u5b89\u540c\u826f-\u5434\u81f4\u51b6-2025-\u4f01\u4e1a\u4eba\u5de5\u667a\u80fd\u6280\u672f\u6c34\u5e73\u7684\u5206\u5c42\u6d4b\u5ea6\u53ca\u5176\u521b\u65b0\u6548\u5e94-\u57fa\u4e8e\u5168\u7403\u77e5\u8bc6\u7f51\u7edc\u89c6\u89d2.json",
+  "conversion_tool": "mineru",
+  "conversion_command": [
+    "python",
+    "C:\\Users\\pc\\.claude\\skills\\mineru-pdf-converter\\scripts\\mineru_convert.py",
+    "--input",
+    "C:\\Users\\pc\\OneDrive\\\u3010\u6211\u7684\u79d1\u7814\u3011\\literature\\\u4e2d\u56fd\u5de5\u4e1a\u7ecf\u6d4e\\\u5b89\u540c\u826f_\u5434\u81f4\u51b6_2025_\u4f01\u4e1a\u4eba\u5de5\u667a\u80fd\u6280\u672f\u6c34\u5e73\u7684\u5206\u5c42\u6d4b\u5ea6\u53ca\u5176\u521b\u65b0\u6548\u5e94\u2014\u2014\u57fa\u4e8e\u5168\u7403\u77e5\u8bc6\u7f51\u7edc\u89c6\u89d2.pdf",
+    "--output-dir",
+    "C:\\Users\\pc\\AppData\\Local\\Temp\\mineru_aneroedc",
+    "--language",
+    "ch"
+  ],
+  "converted_at": "2026-07-28T21:57:46+08:00",
+  "source_sha256": "31ea52d6376e1049410ec3b11213e51da0ccf9fb47c79c68e286fcd34b574279",
+  "source_size_bytes": 1601207,
+  "markdown_size_bytes": 72370,
+  "line_count": 377,
+  "heading_count": 31,
+  "word_count": 2219,
+  "title_guess": "\u4f01\u4e1a\u4eba\u5de5\u667a\u80fd\u6280\u672f\u6c34\u5e73\u7684\u5206\u5c42\u6d4b\u5ea6\u53ca\u5176\u521b\u65b0\u6548\u5e94\u2014\u2014\u57fa\u4e8e\u5168\u7403\u77e5\u8bc6\u7f51\u7edc\u89c6\u89d2",
+  "authors_guess": "\u5b89\u540c\u826f \u5434\u81f4\u51b6",
+  "year_guess": "2025",
+  "conversion_notes": [],
+  "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_aneroedc\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"7aba8844-5d2b-4754-917c-5e1175799448\"\n}",
+  "mineru_stderr": "",
+  "markitdown_stdout": "",
+  "markitdown_stderr": ""
+}
