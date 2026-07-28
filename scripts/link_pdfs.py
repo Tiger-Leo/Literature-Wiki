@@ -22,11 +22,49 @@ import sys
 import unicodedata
 from pathlib import Path
 
+from pypinyin import lazy_pinyin, Style
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 # Re-use the slug function so --new-only can check for existing conversions
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from pipeline_utils import canonical_slug_from_filename
+
+
+def _transliterate_chinese_stem(stem: str) -> str:
+    """Convert Chinese characters in *stem* to pinyin (tone marks stripped).
+
+    Only transliterates CJK Unified Ideographs (U+4E00–U+9FFF) and
+    CJK Extension A (U+3400–U+4DBF).  Already-ASCII text passes through
+    unchanged.  Non-CJK runs are kept intact (not broken into single chars).
+    """
+
+    def _is_cjk(ch: str) -> bool:
+        return '一' <= ch <= '鿿' or '㐀' <= ch <= '䶿'
+
+    if not any(_is_cjk(c) for c in stem):
+        return stem
+
+    result: list[str] = []
+    cjk_buf: list[str] = []
+
+    for ch in stem:
+        if _is_cjk(ch):
+            cjk_buf.append(ch)
+        else:
+            if cjk_buf:
+                block = ''.join(cjk_buf)
+                pinyin_tokens = lazy_pinyin(block, style=Style.TONE3, errors='ignore')
+                result.append(' '.join(re.sub(r'\d+', '', tok) for tok in pinyin_tokens))
+                cjk_buf.clear()
+            result.append(ch)
+
+    if cjk_buf:
+        block = ''.join(cjk_buf)
+        pinyin_tokens = lazy_pinyin(block, style=Style.TONE3, errors='ignore')
+        result.append(' '.join(re.sub(r'\d+', '', tok) for tok in pinyin_tokens))
+
+    return ''.join(result)
 
 
 def normalize_filename(original_name: str) -> str:
@@ -52,6 +90,9 @@ def normalize_filename(original_name: str) -> str:
     }
     for char, repl in replacements.items():
         stem = stem.replace(char, repl)
+
+    # Pinyin transliteration for remaining Chinese characters
+    stem = _transliterate_chinese_stem(stem)
 
     # ASCII transliteration — drops any remaining non-ASCII characters
     stem = unicodedata.normalize('NFKD', stem)
