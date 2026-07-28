@@ -40,11 +40,12 @@ Global navigation entry point for agents and humans.
 
 ## Current Status
 
-- Papers ingested: 13
+- Papers in source library: 3,538
+- Papers ingested (converted to markdown): 12
 - Last build: —
 - Last lint: —
 - Last synthesis: —
-- Last config: 2026-07-28 (manifest adjusted — 13 PDFs verified consistent)
+- Last config: 2026-07-28 (manifest regenerated from source dir; pypinyin transliteration added)
 
 *Update this section after each major wiki operation.*
 
