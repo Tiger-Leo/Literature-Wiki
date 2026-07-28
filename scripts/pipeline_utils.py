@@ -195,3 +195,42 @@ def resolve_pdf_path(pdf_path: str | Path) -> Path:
         f"PDF not found: {pdf_path}\n"
         f"  Checked: file system and {REPO_ROOT / 'raw_pdfs' / 'pdf_sources.json'}"
     )
+
+
+# ---------------------------------------------------------------------------
+# Manifest entry helpers — page counting & canonical field order
+# ---------------------------------------------------------------------------
+
+def get_pdf_page_count(pdf_path: str | Path) -> int:
+    """Extract page count from a PDF using PyMuPDF.
+
+    Returns 0 if the file is missing, unreadable, or not a valid PDF.
+    """
+    try:
+        import fitz  # PyMuPDF
+        doc = fitz.open(str(pdf_path))
+        pages = doc.page_count
+        doc.close()
+        return pages
+    except Exception:
+        return 0
+
+
+def normalize_manifest_entry(entry: dict) -> dict:
+    """Rebuild a manifest entry with canonical field order.
+
+    Canonical order: ``path``, ``slug``, ``pages``, ``converted``.
+
+    If ``pages`` is missing or ``None``, it is extracted from the PDF
+    on disk via :func:`get_pdf_page_count`.  Other fields fall back to
+    sensible defaults when absent.
+    """
+    pages = entry.get("pages")
+    if pages is None:
+        pages = get_pdf_page_count(entry.get("path", ""))
+    return {
+        "path": entry.get("path", ""),
+        "slug": entry.get("slug", ""),
+        "pages": pages,
+        "converted": entry.get("converted", False),
+    }

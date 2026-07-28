@@ -28,7 +28,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 # Re-use the slug function so --new-only can check for existing conversions
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from pipeline_utils import canonical_slug_from_filename
+from pipeline_utils import canonical_slug_from_filename, get_pdf_page_count, normalize_manifest_entry
 
 
 def normalize_filename(original_name: str) -> str:
@@ -149,6 +149,7 @@ def generate_manifest(
         fresh[normalized] = {
             "path": str(pdf_path.resolve()),
             "slug": slug,
+            "pages": get_pdf_page_count(pdf_path),
             "converted": False,
         }
 
@@ -164,6 +165,7 @@ def generate_manifest(
             merged_pdfs[name] = {
                 "path": value,
                 "slug": canonical_slug_from_filename(name),
+                "pages": get_pdf_page_count(value),
                 "converted": False,
             }
         else:
@@ -180,6 +182,9 @@ def generate_manifest(
             # Keep the existing converted status
             info["converted"] = merged_pdfs[name].get("converted", False)
     merged_pdfs.update(fresh)
+
+    # Normalize all entries to canonical field order (path, slug, pages, converted)
+    merged_pdfs = {name: normalize_manifest_entry(entry) for name, entry in merged_pdfs.items()}
 
     # Rebuild source_dirs list
     all_source_dirs = set(existing.get("source_dirs", []))
