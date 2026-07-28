@@ -1,6 +1,6 @@
 {
   "canonical_slug": "hall-helmers-2024-strategic-patenting-patent-portfolio-races-and-p",
-  "source_pdf": "E:\\Desktop\\Desktop\\test\\Oxford University PressNew York\\Hall_Helmers_2024_Strategic Patenting, Patent Portfolio Races, and P.pdf",
+  "source_pdf": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\Oxford University PressNew York\\Hall_Helmers_2024_Strategic Patenting, Patent Portfolio Races, and P.pdf",
   "source_pdf_name": "Hall Helmers - 2024 - Strategic Patenting, Patent Portfolio Races, and P.pdf",
   "markdown_file": "raw_markdown/papers/hall-helmers-2024-strategic-patenting-patent-portfolio-races-and-p.md",
   "metadata_file": "raw_markdown/metadata/hall-helmers-2024-strategic-patenting-patent-portfolio-races-and-p.json",
@@ -25,9 +25,12 @@
   "title_guess": "Strategic Patenting, Patent Portfolio Races, and P",
   "authors_guess": "Hall Helmers",
   "year_guess": "2024",
-  "conversion_notes": [],
+  "conversion_notes": [
+    "2026-07-28: updated source_pdf from regenerated manifest"
+  ],
   "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_gwmk8oyg\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"be1e835a-3f8f-4af4-b376-71fc835bd44f\"\n}",
   "mineru_stderr": "",
   "markitdown_stdout": "",
-  "markitdown_stderr": ""
+  "markitdown_stderr": "",
+  "manifest_key": "Hall Helmers - 2024 - Strategic Patenting, Patent Portfolio Races, and P.pdf"
 }

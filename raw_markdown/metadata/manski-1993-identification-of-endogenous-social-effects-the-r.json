@@ -1,6 +1,6 @@
 {
   "canonical_slug": "manski-1993-identification-of-endogenous-social-effects-the-r",
-  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Manski_1993_Identification of Endogenous Social Effects The R.pdf",
+  "source_pdf": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\Review of Economic Studies\\Manski_1993_Identification of Endogenous Social Effects The R.pdf",
   "source_pdf_name": "Manski - 1993 - Identification of Endogenous Social Effects The R.pdf",
   "markdown_file": "raw_markdown/papers/manski-1993-identification-of-endogenous-social-effects-the-r.md",
   "metadata_file": "raw_markdown/metadata/manski-1993-identification-of-endogenous-social-effects-the-r.json",
@@ -25,9 +25,12 @@
   "title_guess": "Identification of Endogenous Social Effects The R",
   "authors_guess": "Manski",
   "year_guess": "1993",
-  "conversion_notes": [],
+  "conversion_notes": [
+    "2026-07-28: updated source_pdf from regenerated manifest"
+  ],
   "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_qegc20vj\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"9903e3ec-3a36-4ed0-81e4-401edd795617\"\n}",
   "mineru_stderr": "",
   "markitdown_stdout": "",
-  "markitdown_stderr": ""
+  "markitdown_stderr": "",
+  "manifest_key": "Manski - 1993 - Identification of Endogenous Social Effects The R.pdf"
 }

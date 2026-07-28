@@ -1,6 +1,6 @@
 {
   "canonical_slug": "kugler-verhoogen-2012-prices-plant-size-and-product-quality",
-  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Kugler_Verhoogen_2012_Prices, Plant Size, and Product Quality.pdf",
+  "source_pdf": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\Review of Economic Studies\\Kugler_Verhoogen_2012_Prices, Plant Size, and Product Quality.pdf",
   "source_pdf_name": "Kugler Verhoogen - 2012 - Prices, Plant Size, and Product Quality.pdf",
   "markdown_file": "raw_markdown/papers/kugler-verhoogen-2012-prices-plant-size-and-product-quality.md",
   "metadata_file": "raw_markdown/metadata/kugler-verhoogen-2012-prices-plant-size-and-product-quality.json",
@@ -25,9 +25,12 @@
   "title_guess": "Prices, Plant Size, and Product Quality",
   "authors_guess": "Kugler Verhoogen",
   "year_guess": "2012",
-  "conversion_notes": [],
+  "conversion_notes": [
+    "2026-07-28: updated source_pdf from regenerated manifest"
+  ],
   "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_ccqks65z\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"c9c922e0-4b3e-4832-8312-3086e69fb7e0\"\n}",
   "mineru_stderr": "",
   "markitdown_stdout": "",
-  "markitdown_stderr": ""
+  "markitdown_stderr": "",
+  "manifest_key": "Kugler Verhoogen - 2012 - Prices, Plant Size, and Product Quality.pdf"
 }

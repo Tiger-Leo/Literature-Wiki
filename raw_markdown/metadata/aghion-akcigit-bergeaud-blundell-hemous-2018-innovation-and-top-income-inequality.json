@@ -1,6 +1,6 @@
 {
   "canonical_slug": "aghion-akcigit-bergeaud-blundell-hemous-2018-innovation-and-top-income-inequality",
-  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Aghion_Akcigit_Bergeaud_Blundell_Hemous_2018_Innovation and Top Income Inequality.pdf",
+  "source_pdf": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\Review of Economic Studies\\Aghion_Akcigit_Bergeaud_Blundell_Hemous_2018_Innovation and Top Income Inequality.pdf",
   "source_pdf_name": "Aghion Akcigit Bergeaud Blundell Hemous - 2018 - Innovation and Top Income Inequality.pdf",
   "markdown_file": "raw_markdown/papers/aghion-akcigit-bergeaud-blundell-hemous-2018-innovation-and-top-income-inequality.md",
   "metadata_file": "raw_markdown/metadata/aghion-akcigit-bergeaud-blundell-hemous-2018-innovation-and-top-income-inequality.json",
@@ -25,9 +25,12 @@
   "title_guess": "Innovation and Top Income Inequality",
   "authors_guess": "Aghion Akcigit Bergeaud Blundell Hemous",
   "year_guess": "2018",
-  "conversion_notes": [],
+  "conversion_notes": [
+    "2026-07-28: updated source_pdf from regenerated manifest"
+  ],
   "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_tx9ry_k2\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"8a97bfc0-25b8-43b3-ad64-7aa081237917\"\n}",
   "mineru_stderr": "",
   "markitdown_stdout": "",
-  "markitdown_stderr": ""
+  "markitdown_stderr": "",
+  "manifest_key": "Aghion Akcigit Bergeaud Blundell Hemous - 2018 - Innovation and Top Income Inequality.pdf"
 }

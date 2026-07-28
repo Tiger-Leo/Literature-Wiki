@@ -1,6 +1,6 @@
 {
   "canonical_slug": "huneeus-rogerson-2023-heterogeneous-paths-of-industrialization",
-  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Huneeus_Rogerson_2023_Heterogeneous Paths of Industrialization.pdf",
+  "source_pdf": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\Review of Economic Studies\\Huneeus_Rogerson_2023_Heterogeneous Paths of Industrialization.pdf",
   "source_pdf_name": "Huneeus Rogerson - 2023 - Heterogeneous Paths of Industrialization.pdf",
   "markdown_file": "raw_markdown/papers/huneeus-rogerson-2023-heterogeneous-paths-of-industrialization.md",
   "metadata_file": "raw_markdown/metadata/huneeus-rogerson-2023-heterogeneous-paths-of-industrialization.json",
@@ -25,9 +25,12 @@
   "title_guess": "Heterogeneous Paths of Industrialization",
   "authors_guess": "Huneeus Rogerson",
   "year_guess": "2023",
-  "conversion_notes": [],
+  "conversion_notes": [
+    "2026-07-28: updated source_pdf from regenerated manifest"
+  ],
   "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_4dg6zbh5\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"8fc0bdd0-2203-4576-9505-27f4d2d9145c\"\n}",
   "mineru_stderr": "",
   "markitdown_stdout": "",
-  "markitdown_stderr": ""
+  "markitdown_stderr": "",
+  "manifest_key": "Huneeus Rogerson - 2023 - Heterogeneous Paths of Industrialization.pdf"
 }

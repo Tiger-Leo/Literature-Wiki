@@ -1,6 +1,6 @@
 {
   "canonical_slug": "zacchia-2020-knowledge-spillovers-through-networks-of-scientist",
-  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Zacchia_2020_Knowledge Spillovers through Networks of Scientist.pdf",
+  "source_pdf": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\Review of Economic Studies\\Zacchia_2020_Knowledge Spillovers through Networks of Scientist.pdf",
   "source_pdf_name": "Zacchia - 2020 - Knowledge Spillovers through Networks of Scientist.pdf",
   "markdown_file": "raw_markdown/papers/zacchia-2020-knowledge-spillovers-through-networks-of-scientist.md",
   "metadata_file": "raw_markdown/metadata/zacchia-2020-knowledge-spillovers-through-networks-of-scientist.json",
@@ -25,9 +25,12 @@
   "title_guess": "Knowledge Spillovers through Networks of Scientist",
   "authors_guess": "Zacchia",
   "year_guess": "2020",
-  "conversion_notes": [],
+  "conversion_notes": [
+    "2026-07-28: updated source_pdf from regenerated manifest"
+  ],
   "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_gz7u643r\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"e3e18364-e679-4140-b607-27224f0d2e3e\"\n}",
   "mineru_stderr": "",
   "markitdown_stdout": "",
-  "markitdown_stderr": ""
+  "markitdown_stderr": "",
+  "manifest_key": "Zacchia - 2020 - Knowledge Spillovers through Networks of Scientist.pdf"
 }

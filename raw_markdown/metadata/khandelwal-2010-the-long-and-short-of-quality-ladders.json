@@ -1,6 +1,6 @@
 {
   "canonical_slug": "khandelwal-2010-the-long-and-short-of-quality-ladders",
-  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Khandelwal_2010_The Long and Short (of) Quality Ladders.pdf",
+  "source_pdf": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\Review of Economic Studies\\Khandelwal_2010_The Long and Short (of) Quality Ladders.pdf",
   "source_pdf_name": "Khandelwal - 2010 - The Long and Short (of) Quality Ladders.pdf",
   "markdown_file": "raw_markdown/papers/khandelwal-2010-the-long-and-short-of-quality-ladders.md",
   "metadata_file": "raw_markdown/metadata/khandelwal-2010-the-long-and-short-of-quality-ladders.json",
@@ -25,9 +25,12 @@
   "title_guess": "The Long and Short (of) Quality Ladders",
   "authors_guess": "Khandelwal",
   "year_guess": "2010",
-  "conversion_notes": [],
+  "conversion_notes": [
+    "2026-07-28: updated source_pdf from regenerated manifest"
+  ],
   "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_56fkwjod\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"4f6be1aa-743e-4337-ba8c-3b4582f500ec\"\n}",
   "mineru_stderr": "",
   "markitdown_stdout": "",
-  "markitdown_stderr": ""
+  "markitdown_stderr": "",
+  "manifest_key": "Khandelwal - 2010 - The Long and Short (of) Quality Ladders.pdf"
 }

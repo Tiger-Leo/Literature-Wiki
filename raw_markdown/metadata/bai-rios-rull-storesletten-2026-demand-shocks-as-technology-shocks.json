@@ -1,6 +1,6 @@
 {
   "canonical_slug": "bai-rios-rull-storesletten-2026-demand-shocks-as-technology-shocks",
-  "source_pdf": "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Bai_R\u00edos-Rull_Storesletten_2026_Demand Shocks as Technology Shocks.pdf",
+  "source_pdf": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\Review of Economic Studies\\Bai_Ríos-Rull_Storesletten_2026_Demand Shocks as Technology Shocks.pdf",
   "source_pdf_name": "Bai Rios-Rull Storesletten - 2026 - Demand Shocks as Technology Shocks.pdf",
   "markdown_file": "raw_markdown/papers/bai-rios-rull-storesletten-2026-demand-shocks-as-technology-shocks.md",
   "metadata_file": "raw_markdown/metadata/bai-rios-rull-storesletten-2026-demand-shocks-as-technology-shocks.json",
@@ -9,7 +9,7 @@
     "python",
     "C:\\Users\\pc\\.claude\\skills\\mineru-pdf-converter\\scripts\\mineru_convert.py",
     "--input",
-    "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Bai_R\u00edos-Rull_Storesletten_2026_Demand Shocks as Technology Shocks.pdf",
+    "E:\\Desktop\\Desktop\\test\\Review of Economic Studies\\Bai_Ríos-Rull_Storesletten_2026_Demand Shocks as Technology Shocks.pdf",
     "--output-dir",
     "C:\\Users\\pc\\AppData\\Local\\Temp\\mineru_5rouqr7z",
     "--language",
@@ -25,9 +25,12 @@
   "title_guess": "Demand Shocks as Technology Shocks",
   "authors_guess": "Bai Rios-Rull Storesletten",
   "year_guess": "2026",
-  "conversion_notes": [],
+  "conversion_notes": [
+    "2026-07-28: updated source_pdf from regenerated manifest"
+  ],
   "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_5rouqr7z\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"53d88fc7-80f8-4c2e-838a-002cfe44419c\"\n}",
   "mineru_stderr": "",
   "markitdown_stdout": "",
-  "markitdown_stderr": ""
+  "markitdown_stderr": "",
+  "manifest_key": "Bai Rios-Rull Storesletten - 2026 - Demand Shocks as Technology Shocks.pdf"
 }
