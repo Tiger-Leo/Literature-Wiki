@@ -24,3 +24,10 @@ Append-only log of all wiki operations.
 - 已有 markdown 协调: 12/13 篇 metadata 路径已更新至真实目录
 - 未匹配: Miranda-Agrippino et al 2025（文献库仅有 2026 版）
 - 转换: 未进行（仅 manifest）
+
+## 2026-07-28 | manifest | 改用中文原文命名方案
+- normalize_filename(): 移除 pypinyin 拼音转写 + ASCII 折叠 → 保留中文/CJK 原文
+- ascii_slugify(): 不再丢弃非 ASCII 字符 → 保留中文进 slug 文件名
+- 重音字符处理: NFKD 分解后移除组合变音符号 (í→i, ü→u)
+- Manifest 重生成: 2,252 中文key + 1,286 英文key
+- 12 篇英文论文 slug 全部不变

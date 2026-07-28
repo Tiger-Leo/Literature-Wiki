@@ -45,7 +45,7 @@ Global navigation entry point for agents and humans.
 - Last build: —
 - Last lint: —
 - Last synthesis: —
-- Last config: 2026-07-28 (manifest regenerated from source dir; pypinyin transliteration added)
+- Last config: 2026-07-28 (manifest regenerated with Chinese原文 preserved; 2,252 Chinese + 1,286 English entries)
 
 *Update this section after each major wiki operation.*
 
