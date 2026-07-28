@@ -90,15 +90,15 @@ try {
     # ── 6. Show reminders ──────────────────────────────────────────
     if ($newCount -gt 0) {
         Write-Output ""
-        Write-Output "📄 检测到 $newCount 篇新增 PDF，已更新 pdf_sources.json"
-        Write-Output "   本周: $weekKey  |  时间: $timestamp"
-        Write-Output "   转换新论文: python scripts/link_pdfs.py `<文献库>` --convert --new-only"
-        Write-Output "   查看日志: cat .cache/pdf-sync.log"
+        Write-Output "$newCount new PDF(s) detected, pdf_sources.json updated"
+        Write-Output "   Week: $weekKey  |  Time: $timestamp"
+        Write-Output "   Convert new papers: python scripts/link_pdfs.py <library> --convert --new-only"
+        Write-Output "   Check log: cat .cache/pdf-sync.log"
         Write-Output ""
     } else {
         # Quiet — no new papers, just log it
         Write-Output ""
-        Write-Output "📄 PDF 文献库巡检完成 — 无新增论文  (week $weekKey)"
+        Write-Output "PDF library scan complete - no new papers (week $weekKey)"
         Write-Output ""
     }
 } catch {

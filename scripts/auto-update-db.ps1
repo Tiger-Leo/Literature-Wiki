@@ -92,15 +92,14 @@ try {
     Add-Content -Path $logFile -Value "[$timestamp] Started zotero-mcp update-db --fulltext (week $weekKey, PID $($proc.Id))"
 
     # ── Show a reminder in the Claude Code session ──────────────────
-    Write-Output ""
-    Write-Output "📚 请打开 Zotero 语义搜索数据库进行后台更新（zotero-mcp update-db --fulltext）"
-    Write-Output "   本周: $weekKey  |  时间: $timestamp  |  PID: $($proc.Id)"
-    Write-Output "   查看进度: Get-Content .cache/zotero-db-update.log -Tail 20"
-    Write-Output ""
+    Write-Output 'Zotero semantic search DB is updating in background (zotero-mcp update-db --fulltext)'
+    Write-Output "   Week: $weekKey  |  Time: $timestamp  |  PID: $($proc.Id)"
+    Write-Output '   Check progress: Get-Content .cache/zotero-db-update.log -Tail 20'
 } catch {
     # If the background launch fails, remove the stamp so we retry next time
     Remove-Item $StampFile -Force -ErrorAction SilentlyContinue
-    Write-Warning "Failed to launch zotero-mcp update-db: $_"
+    $errMsg = 'Failed to launch zotero-mcp update-db: ' + $_
+    Write-Warning $errMsg
     exit 1
 }
 
