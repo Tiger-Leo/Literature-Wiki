@@ -114,8 +114,42 @@ Replace this file with your project's operational rules. Minimum required sectio
 
 ## Layers
 - `raw_pdfs/`: immutable source PDFs. Never edit.
-- `raw_markdown/`: machine-readable conversions. Default converter: markitdown.
+- `raw_markdown/`: machine-readable conversions. Preferred converter: **MinerU API**（高质量，保留公式/表格）；fallback: markitdown.
 - `wiki/`: canonical knowledge layer — Wikipedia-style synthesis pages. LLM-maintained via `/wiki-build`.
+
+## PDF Conversion（MinerU 优先）
+
+所有 PDF 收录于 `raw_pdfs/pdf_sources.json`，每个条目含 `path`、`slug`、`converted`、`pages` 字段。
+
+### 转化流程
+
+统一入口为 `scripts/convert_pdf_to_markdown.py`，一行命令完成 MinerU 转化 + metadata 生成 + 临时文件清理 + 清单标记：
+
+```bash
+# 中文文献（language 默认 ch）
+python scripts/convert_pdf_to_markdown.py "<pdf-path>" --update-manifest
+
+# 英文文献
+python scripts/convert_pdf_to_markdown.py "<pdf-path>" --language en --update-manifest
+
+# 批量转化（从 pdf_sources.json 读取 unconverted 条目，每次 N 篇）
+python scripts/batch_convert.py 10
+```
+
+注意：不要直接调用 MinerU skill 脚本（`~/.claude/skills/mineru-pdf-converter/...`）——那是底层工具。始终用 `convert_pdf_to_markdown.py` 封装它，以保证 metadata 生成和临时文件清理。
+
+### 配额约束
+
+- MinerU 免费额度：**2000 页/天**
+- 全库约 **3,538 篇 / 89,944 页**，全部转完需约 45 天
+- 优先转化核心文献；`pdf_sources.json` 中 `pages` 字段可辅助排优先级
+- 超过日配额时 MinerU 降级为低优先级（速度变慢），建议每日控制在 2000 页以内
+
+### 转化状态追踪
+
+- `pdf_sources.json` 中 `converted: false` → 待转化
+- `convert_pdf_to_markdown.py --update-manifest` 成功后自动标记 `converted: true`
+- `pages: 0` 表示文件缺失或读取异常，跳过
 
 ## Navigation Contract
 - Read `CLAUDE.md` first.

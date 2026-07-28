@@ -25,21 +25,40 @@ python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest
 ### PDF 管理（外部 PDF，无需复制或移动源文件）
 
 ```powershell
-# 将外部 PDF 目录链接到项目（生成路径映射表）
+# 将外部 PDF 目录链接到项目（生成 pdf_sources.json 路径映射表）
 python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest
 
 # 排除某些子目录（可多次使用 --exclude）
 python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest --exclude "<你的PDF目录>\不想读的文件夹"
-
-# 批量转换全部 PDF 为 Markdown（MinerU 云端 API，高质量）
-python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest --convert
-
-# 增量更新：只转换新增的 PDF（日常最常用）
-python scripts/link_pdfs.py "<你的PDF目录>" --mode manifest --convert --new-only
-
-# 单篇转换（指定转换器）
-python scripts/convert_pdf_to_markdown.py "Author and Author - YYYY - Title.pdf" --converter mineru --overwrite
 ```
+
+### PDF 转化（MinerU 云端 API，高质量）
+
+> MinerU 免费额度 **2000 页/天**。全库 ~3500 篇、~9 万页，全部转完需约 45 天。
+> 建议每日跑一批，由少到多，优先核心文献。
+
+```powershell
+# 批量转化：从 pdf_sources.json 读取 N 篇 unconverted 的 PDF（按页数从少到多排序）
+python scripts/batch_convert.py           # 默认 20 篇
+python scripts/batch_convert.py 10        # 10 篇
+python scripts/batch_convert.py 5 --language en  # 5 篇英文文献
+
+# 单篇转化：
+python scripts/convert_pdf_to_markdown.py "Author - YYYY - Title.pdf" --update-manifest
+python scripts/convert_pdf_to_markdown.py "Author - YYYY - Title.pdf" --language en --update-manifest
+
+# 查看转化状态（converted: false = 待转化）
+python -c "import json; d=json.load(open('raw_pdfs/pdf_sources.json','r',encoding='utf-8')); total=len(d['pdfs']); done=sum(1 for v in d['pdfs'].values() if v.get('converted')); print(f'{done}/{total} converted ({done/total*100:.1f}%)')"
+```
+
+**`convert_pdf_to_markdown.py` 参数：**
+
+| 参数 | 默认值 | 说明 |
+|---|---|---|
+| `--converter` | `mineru` | 转化引擎：`mineru`（推荐）或 `markitdown` |
+| `--language` | `ch` | 文档语言：`ch`（中文）或 `en`（英文） |
+| `--update-manifest` | 关闭 | 成功后自动标记 `converted: true` |
+| `--overwrite` | 关闭 | 覆盖已有的 .md 和 metadata 输出 |
 
 ### Zotero 语义搜索
 
