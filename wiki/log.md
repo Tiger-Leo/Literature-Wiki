@@ -13,4 +13,4 @@ Append-only log of all wiki operations.
 
 ---
 
-*Log entries appear below as the wiki grows.*
+## 2026-07-28 | config | 将 raw_pdfs/ 整体加入 .gitignore（含 pdf_sources.json）

@@ -1,4 +1,4 @@
-# [Your Wiki Name]
+# 📚 产业融合文献 Wiki
 
 Global navigation entry point for agents and humans.
 
@@ -44,6 +44,7 @@ Global navigation entry point for agents and humans.
 - Last build: —
 - Last lint: —
 - Last synthesis: —
+- Last config: 2026-07-28
 
 *Update this section after each major wiki operation.*
 
