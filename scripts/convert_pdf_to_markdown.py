@@ -24,8 +24,10 @@ from pathlib import Path
 from pipeline_utils import (
     REPO_ROOT,
     canonical_slug_from_filename,
+    classify_doc_type,
     count_markdown_headings,
     count_words,
+    get_pdf_page_count,
     normalize_manifest_entry,
     parse_pdf_filename,
     relative_to_repo,
@@ -167,29 +169,52 @@ def convert_one(pdf_path: Path, output_root: Path, overwrite: bool, converter: s
     parsed = parse_pdf_filename(pdf_path)
     source_bytes = real_path.stat().st_size
 
+    # Determine doc_type and page count: look up from manifest first (fast),
+    # fall back to direct classification (slow — opens the PDF).
+    manifest_key, manifest_entry = _lookup_manifest_entry(real_path)
+    if manifest_entry:
+        pdf_pages = manifest_entry.get("pages", 0)
+        doc_type = manifest_entry.get("type") or classify_doc_type(str(real_path), pdf_pages)
+    else:
+        manifest_key = ""
+        pdf_pages = get_pdf_page_count(real_path)
+        doc_type = classify_doc_type(str(real_path), pdf_pages)
+
     metadata = {
+        # ── Identity ──────────────────────────────────────────
         "canonical_slug": slug,
         "source_pdf": str(real_path),
         "source_pdf_name": pdf_path.name,
+        "doc_type": doc_type,
+        "source_pages": pdf_pages,
+        # ── Output paths ──────────────────────────────────────
         "markdown_file": relative_to_repo(md_path),
         "metadata_file": relative_to_repo(meta_path),
+        # ── Conversion ────────────────────────────────────────
         "conversion_tool": conversion_tool,
         "conversion_command": cmd,
         "converted_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        # ── Source stats ──────────────────────────────────────
         "source_sha256": sha256_file(real_path),
         "source_size_bytes": source_bytes,
+        # ── Output stats ──────────────────────────────────────
         "markdown_size_bytes": md_path.stat().st_size,
         "line_count": len(markdown_text.splitlines()),
         "heading_count": count_markdown_headings(markdown_text),
         "word_count": count_words(markdown_text),
+        # ── Heuristics ────────────────────────────────────────
         "title_guess": parsed["title"],
         "authors_guess": parsed["authors"],
         "year_guess": parsed["year"],
+        # ── Notes ─────────────────────────────────────────────
         "conversion_notes": conversion_notes,
+        # ── Raw output ────────────────────────────────────────
         "mineru_stdout": completed.stdout.strip() if converter == "mineru" else "",
         "mineru_stderr": completed.stderr.strip() if converter == "mineru" else "",
         "markitdown_stdout": completed.stdout.strip() if converter != "mineru" else "",
         "markitdown_stderr": completed.stderr.strip() if converter != "mineru" else "",
+        # ── Manifest ──────────────────────────────────────────
+        "manifest_key": manifest_key,
     }
     meta_path.write_text(json.dumps(metadata, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
 
@@ -198,6 +223,28 @@ def convert_one(pdf_path: Path, output_root: Path, overwrite: bool, converter: s
         _mark_converted_in_manifest(real_path)
 
     return metadata
+
+
+def _load_manifest() -> dict:
+    """Return the full pdf_sources.json manifest, or an empty dict."""
+    manifest_path = REPO_ROOT / "raw_pdfs" / "pdf_sources.json"
+    if not manifest_path.exists():
+        return {}
+    with open(manifest_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _lookup_manifest_entry(real_path: Path) -> tuple[str | None, dict | None]:
+    """Find the manifest (key, entry) for *real_path*, or (None, None)."""
+    manifest = _load_manifest()
+    for name, entry in manifest.get("pdfs", {}).items():
+        entry_path = Path(entry.get("path", ""))
+        try:
+            if entry_path.resolve() == real_path.resolve():
+                return name, entry
+        except OSError:
+            continue
+    return None, None
 
 
 def _mark_converted_in_manifest(real_path: Path) -> bool:

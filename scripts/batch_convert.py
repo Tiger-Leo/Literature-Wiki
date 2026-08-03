@@ -23,30 +23,51 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("n", nargs="?", type=int, default=20, help="Number of PDFs to convert (default: 20)")
     parser.add_argument("--language", default="ch", help="Document language for MinerU: ch (default) or en")
+    parser.add_argument(
+        "--only", default="",
+        help="Only convert these doc types (comma-separated). --only and --skip are mutually exclusive.",
+    )
+    parser.add_argument(
+        "--skip", default="",
+        help="Skip these doc types (comma-separated): dissertation, book, book-chapter. --only takes precedence.",
+    )
     args = parser.parse_args()
 
     N = args.n
     language = args.language
+    only_types = {t.strip() for t in args.only.split(",") if t.strip()}
+    skip_types = {t.strip() for t in args.skip.split(",") if t.strip()}
 
     with open(MANIFEST_PATH, encoding="utf-8") as f:
         manifest = json.load(f)
 
-    # Collect first N unconverted entries
+    # Collect first N unconverted entries, applying type filters
     todo = []
     for name, info in manifest["pdfs"].items():
         if isinstance(info, dict) and not info.get("converted"):
+            doc_type = info.get("type", "journal-article")
+            if only_types and doc_type not in only_types:
+                continue
+            if not only_types and skip_types and doc_type in skip_types:
+                continue
             todo.append((name, info))
         if len(todo) >= N:
             break
 
     if not todo:
-        print("No unconverted PDFs found in manifest.")
+        print("No unconverted PDFs found in manifest (after filtering).")
         return 0
 
     # Sort by page count ascending (thin papers first — faster to convert, quicker feedback)
     todo.sort(key=lambda x: x[1].get("pages", 0))
 
-    print(f"Converting {len(todo)} PDFs via MinerU (language={language})...\n")
+    if only_types:
+        filter_msg = f", only: {','.join(sorted(only_types))}"
+    elif skip_types:
+        filter_msg = f", skipping: {','.join(sorted(skip_types))}"
+    else:
+        filter_msg = ""
+    print(f"Converting {len(todo)} PDFs via MinerU (language={language}{filter_msg})...\n")
 
     success = 0
     fail = 0
@@ -54,7 +75,8 @@ def main():
         real_path = info["path"]
         slug = info["slug"]
         pages = info.get("pages", "?")
-        print(f"[{i}/{len(todo)}] {slug}  ({pages} pp.)")
+        doc_type = info.get("type", "?")
+        print(f"[{i}/{len(todo)}] [{doc_type}] {slug}  ({pages} pp.)")
         print(f"       file: {Path(real_path).name[:70]}")
 
         # Skip if already converted (check filesystem directly)

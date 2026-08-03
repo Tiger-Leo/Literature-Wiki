@@ -198,8 +198,68 @@ def resolve_pdf_path(pdf_path: str | Path) -> Path:
 
 
 # ---------------------------------------------------------------------------
-# Manifest entry helpers — page counting & canonical field order
+# Manifest entry helpers — page counting, doc-type classification & canonical field order
 # ---------------------------------------------------------------------------
+
+# Publisher imprints commonly found in directory names — used to distinguish
+# books / book-chapters from journal articles.
+_PUBLISHER_DIR_KW = [
+    "press", "springer", "routledge", "wiley", "elsevier", "palgrave",
+    "cambridge university", "oxford university", "harvard", "mit press",
+    "princeton", "chicago", "mcgraw", "pearson", "sage", "thomson",
+    "kluwer", "birkhauser", "world scientific", "crc", "academic press",
+    "edward elgar", "now publishers", "the free press", "free press",
+    "atlantis press", "stata press", "harvard business",
+    "abo akademi",  # Åbo Akademi University Press
+]
+
+# Filename / path keywords that strongly indicate a dissertation
+_THESIS_KW = [
+    "博士", "硕士", "学位论文", "dissertation", "thesis",
+    "doctoral", "ph.d.", "phd thesis",
+]
+
+
+def classify_doc_type(pdf_path: str | Path, pages: int) -> str:
+    """Classify a PDF into one of four document types.
+
+    Returns one of: ``"journal-article"``, ``"dissertation"``,
+    ``"book"``, ``"book-chapter"``.
+
+    Heuristics (in priority order):
+    1. Directory named after a publisher + pages ≥ 200 → ``"book"``
+    2. Directory named after a publisher + pages < 60 → ``"book-chapter"``
+    3. Directory named after a publisher → ``"book"`` (catch-all)
+    4. Filename contains thesis keywords → ``"dissertation"``
+    5. 100 ≤ pages < 200 and NOT a publisher directory → ``"dissertation"``
+    6. pages ≥ 200 → ``"book"``
+    7. Everything else → ``"journal-article"``
+    """
+    path_str = str(pdf_path)
+    dirname_lower = Path(pdf_path).parent.name.lower()
+    is_publisher_dir = any(kw in dirname_lower for kw in _PUBLISHER_DIR_KW)
+
+    # Publisher directory → book or book-chapter
+    if is_publisher_dir:
+        if pages >= 200:
+            return "book"
+        if pages < 60:
+            return "book-chapter"
+        return "book"
+
+    # Thesis keywords in filename
+    fname_lower = Path(pdf_path).name.lower()
+    if any(kw in fname_lower for kw in _THESIS_KW):
+        return "dissertation"
+
+    # Page-count heuristics (non-publisher paths)
+    if 100 <= pages < 200:
+        return "dissertation"
+    if pages >= 200:
+        return "book"
+
+    return "journal-article"
+
 
 def get_pdf_page_count(pdf_path: str | Path) -> int:
     """Extract page count from a PDF using PyMuPDF.
@@ -219,18 +279,24 @@ def get_pdf_page_count(pdf_path: str | Path) -> int:
 def normalize_manifest_entry(entry: dict) -> dict:
     """Rebuild a manifest entry with canonical field order.
 
-    Canonical order: ``path``, ``slug``, ``pages``, ``converted``.
+    Canonical order: ``path``, ``slug``, ``type``, ``pages``, ``converted``.
 
+    If ``type`` is missing it is inferred via :func:`classify_doc_type`.
     If ``pages`` is missing or ``None``, it is extracted from the PDF
     on disk via :func:`get_pdf_page_count`.  Other fields fall back to
     sensible defaults when absent.
     """
+    path = entry.get("path", "")
     pages = entry.get("pages")
     if pages is None:
-        pages = get_pdf_page_count(entry.get("path", ""))
+        pages = get_pdf_page_count(path)
+    doc_type = entry.get("type")
+    if doc_type is None:
+        doc_type = classify_doc_type(path, pages)
     return {
-        "path": entry.get("path", ""),
+        "path": path,
         "slug": entry.get("slug", ""),
+        "type": doc_type,
         "pages": pages,
         "converted": entry.get("converted", False),
     }

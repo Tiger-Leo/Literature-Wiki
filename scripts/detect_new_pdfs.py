@@ -18,7 +18,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 from link_pdfs import normalize_filename
-from pipeline_utils import canonical_slug_from_filename
+from pipeline_utils import canonical_slug_from_filename, classify_doc_type, get_pdf_page_count, normalize_manifest_entry
 
 MANIFEST_PATH = REPO_ROOT / "raw_pdfs" / "pdf_sources.json"
 PAPERS_DIR = REPO_ROOT / "raw_markdown" / "papers"
@@ -77,10 +77,10 @@ def format_report(result: dict) -> str:
             norm = normalize_filename(name)
             slug = canonical_slug_from_filename(norm)
             md_exists = (PAPERS_DIR / f"{slug}.md").exists()
+            pages = get_pdf_page_count(p)
+            doc_type = classify_doc_type(p, pages)
             tag = "[has MD]" if md_exists else "[NEW]"
-            lines.append(f"  {tag} {norm}")
-            if md_exists:
-                lines.append(f"       slug: {slug}")
+            lines.append(f"  {tag} [{doc_type}] ({pages}pp) {norm}")
     else:
         lines.append("--- NEW: 0 ---")
 
@@ -106,14 +106,22 @@ def update_manifest(manifest: dict, new_pdfs: list[str]) -> int:
             continue
         slug = canonical_slug_from_filename(norm)
         md_exists = (PAPERS_DIR / f"{slug}.md").exists()
+        pages = get_pdf_page_count(pdf_path)
         manifest["pdfs"][norm] = {
             "path": pdf_path,
             "slug": slug,
+            "type": classify_doc_type(pdf_path, pages),
+            "pages": pages,
             "converted": md_exists,
         }
         added += 1
 
     if added:
+        # Normalise all entries to canonical field order (path, slug, type, pages, converted)
+        manifest["pdfs"] = {
+            name: normalize_manifest_entry(e)
+            for name, e in manifest["pdfs"].items()
+        }
         # Sort: Chinese (pinyin) first, English alphabetical after
         from pipeline_utils import manifest_sort_key
         manifest["pdfs"] = dict(

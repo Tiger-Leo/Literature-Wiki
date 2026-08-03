@@ -2,6 +2,8 @@
   "canonical_slug": "\u5b89\u540c\u826f-\u9b4f\u5a55-\u59dc\u8238-2023-\u57fa\u4e8e\u590d\u6742\u7f51\u7edc\u7684\u4e2d\u56fd\u4f01\u4e1a\u4e92\u8054\u5f0f\u521b\u65b0",
   "source_pdf": "C:\\Users\\pc\\OneDrive\\\u3010\u6211\u7684\u79d1\u7814\u3011\\literature\\\u4e2d\u56fd\u793e\u4f1a\u79d1\u5b66\\\u5b89\u540c\u826f_\u9b4f\u5a55_\u59dc\u8238_2023_\u57fa\u4e8e\u590d\u6742\u7f51\u7edc\u7684\u4e2d\u56fd\u4f01\u4e1a\u4e92\u8054\u5f0f\u521b\u65b0.pdf",
   "source_pdf_name": "\u5b89\u540c\u826f \u9b4f\u5a55 \u59dc\u8238 - 2023 - \u57fa\u4e8e\u590d\u6742\u7f51\u7edc\u7684\u4e2d\u56fd\u4f01\u4e1a\u4e92\u8054\u5f0f\u521b\u65b0.pdf",
+  "doc_type": "journal-article",
+  "source_pages": 22,
   "markdown_file": "raw_markdown/papers/\u5b89\u540c\u826f-\u9b4f\u5a55-\u59dc\u8238-2023-\u57fa\u4e8e\u590d\u6742\u7f51\u7edc\u7684\u4e2d\u56fd\u4f01\u4e1a\u4e92\u8054\u5f0f\u521b\u65b0.md",
   "metadata_file": "raw_markdown/metadata/\u5b89\u540c\u826f-\u9b4f\u5a55-\u59dc\u8238-2023-\u57fa\u4e8e\u590d\u6742\u7f51\u7edc\u7684\u4e2d\u56fd\u4f01\u4e1a\u4e92\u8054\u5f0f\u521b\u65b0.json",
   "conversion_tool": "mineru",
@@ -29,5 +31,6 @@
   "mineru_stdout": "{\n  \"success\": true,\n  \"output_file\": \"C:\\\\Users\\\\pc\\\\AppData\\\\Local\\\\Temp\\\\mineru_xtu1e664\\\\full.md\",\n  \"warnings\": [],\n  \"batch_id\": \"53a16b62-73c1-4898-9fad-a8fb8203418b\"\n}",
   "mineru_stderr": "",
   "markitdown_stdout": "",
-  "markitdown_stderr": ""
+  "markitdown_stderr": "",
+  "manifest_key": ""
 }
