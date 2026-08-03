@@ -62,10 +62,7 @@ if (Test-Path $StampFile) {
     }
 }
 
-# ── 5. Run the update in background ────────────────────────────────
-# Write the stamp BEFORE launching so concurrent opens don't double-fire
-$weekKey | Out-File -FilePath $StampFile -Encoding utf8 -NoNewline
-
+# ── 5. Resolve zotero-mcp and run in background ─────────────────────
 # Launch zotero-mcp in background (non-blocking)
 $zoteroExe = "C:\Users\pc\miniconda3\Scripts\zotero-mcp.exe"
 if (-not (Test-Path $zoteroExe)) {
@@ -87,6 +84,9 @@ try {
         -RedirectStandardOutput $logFile `
         -RedirectStandardError (Join-Path $CacheDir "zotero-db-update-error.log") `
         -PassThru
+
+    # Write stamp ONLY after successful launch (prevents broken stamp on failure)
+    $weekKey | Out-File -FilePath $StampFile -Encoding utf8 -NoNewline
 
     $timestamp = $beijingNow.ToString("yyyy-MM-dd HH:mm:ss")
     Add-Content -Path $logFile -Value "[$timestamp] Started zotero-mcp update-db --fulltext (week $weekKey, PID $($proc.Id))"

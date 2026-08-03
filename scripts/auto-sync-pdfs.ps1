@@ -58,24 +58,29 @@ if (Test-Path $StampFile) {
     }
 }
 
-# ── 5. Run detection ──────────────────────────────────────────────
-# Write the stamp BEFORE running so concurrent opens don't double-fire
-$weekKey | Out-File -FilePath $StampFile -Encoding utf8 -NoNewline
-
+# ── 5. Resolve python ──────────────────────────────────────────────
 $pythonExe = (Get-Command python -ErrorAction SilentlyContinue).Source
 if (-not $pythonExe) {
-    Write-Warning "python not found — skipping PDF detection"
-    Remove-Item $StampFile -Force -ErrorAction SilentlyContinue
-    exit 1
+    # Fallback to miniconda python (hook env may not have conda init)
+    $condaPython = "C:\Users\pc\miniconda3\python.exe"
+    if (Test-Path $condaPython) {
+        $pythonExe = $condaPython
+    } else {
+        Write-Warning "python not found — skipping PDF detection"
+        exit 1
+    }
 }
 
-$detectScript = Join-Path $ProjectRoot "scripts" "detect_new_pdfs.py"
+$detectScript = Join-Path (Join-Path $ProjectRoot "scripts") "detect_new_pdfs.py"
 $logFile = Join-Path $CacheDir "pdf-sync.log"
 $timestamp = $beijingNow.ToString("yyyy-MM-dd HH:mm:ss")
 
 try {
     # Run detection (--update adds new PDFs to manifest)
     $output = & $pythonExe -X utf8 $detectScript --update 2>&1 | Out-String
+
+    # Write stamp ONLY after successful execution (prevents broken stamp on failure)
+    $weekKey | Out-File -FilePath $StampFile -Encoding utf8 -NoNewline
 
     # Write full output to log
     "[$timestamp] PDF sync — week $weekKey" | Out-File -FilePath $logFile -Encoding utf8
