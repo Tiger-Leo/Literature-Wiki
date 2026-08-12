@@ -169,6 +169,7 @@ python scripts/batch_convert.py 10
 - `python scripts/check_orphans.py wiki`
 - `python scripts/validate_frontmatter.py wiki`
 - `python scripts/export_metadata.py --output exports/raw-markdown-metadata.json`
+- `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-weekly-tasks.ps1` — 检查本周定时任务是否完成（SessionStart 时自动运行）
 ```
 
 ### 1.3 Update _index.md
