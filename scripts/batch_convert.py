@@ -96,7 +96,7 @@ def main():
         env = os.environ.copy()
         env["PYTHONIOENCODING"] = "utf-8"
         result = subprocess.run(
-            ["python", str(CONVERTER), name, "--converter", "mineru", "--language", language, "--overwrite"],
+            ["python", str(CONVERTER), real_path, "--converter", "mineru", "--language", language, "--overwrite"],
             capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600,
             encoding="utf-8", errors="replace", env=env,
         )

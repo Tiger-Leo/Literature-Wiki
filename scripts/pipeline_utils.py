@@ -252,6 +252,11 @@ def classify_doc_type(pdf_path: str | Path, pages: int) -> str:
     if any(kw in fname_lower for kw in _THESIS_KW):
         return "dissertation"
 
+    # University directory + substantial page count → likely dissertation
+    _UNIV_DIR_KW = ["大学", "学院", "university", "college"]
+    if any(kw in dirname_lower for kw in _UNIV_DIR_KW) and pages >= 50:
+        return "dissertation"
+
     # Page-count heuristics (non-publisher paths)
     if 100 <= pages < 200:
         return "dissertation"
