@@ -118,6 +118,38 @@ python scripts/export_wiki.py --wiki-dir wiki             # Export search index
 python -c "import json,glob;[print(f'{json.load(open(f))[\"canonical_slug\"]:55s} {json.load(open(f))[\"conversion_tool\"]}') for f in sorted(glob.glob('raw_markdown/metadata/*.json'))]"
 ```
 
+### Scheduled Tasks (SessionStart Hooks)
+
+The project ships **once-per-week** scheduled tasks, triggered by a Claude Code `SessionStart` hook on **Monday after 22:00 (Beijing time)** and de-duplicated with an ISO-week stamp (runs at most once per week):
+
+| Task | Script | Stamp |
+| --- | --- | --- |
+| Scan new PDFs & update manifest | `scripts/auto-sync-pdfs.ps1` | `.cache/pdf-sync-week.txt` |
+| Update Zotero semantic search DB | `scripts/auto-update-db.ps1` | `.cache/zotero-db-update-week.txt` |
+| Check whether this week's tasks are done | `scripts/check-weekly-tasks.ps1` | — (read-only, no side effects) |
+
+**Hook configuration** (write to `.claude/settings.json` or `.claude/settings.local.json`):
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"<project-root>\\scripts\\auto-update-db.ps1\"" }] },
+      { "hooks": [{ "type": "command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"<project-root>\\scripts\\auto-sync-pdfs.ps1\"" }] },
+      { "hooks": [{ "type": "command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"<project-root>\\scripts\\check-weekly-tasks.ps1\"" }] }
+    ]
+  }
+}
+```
+
+> ⚠️ `.claude/settings.local.json` is git-ignored by default (machine-local config); to share the hook across machines, write it to the tracked `.claude/settings.json`.
+
+**Manually check whether this week's tasks are done:**
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\check-weekly-tasks.ps1
+```
+
 ---
 
 ## 🧭 What Is This?

@@ -154,6 +154,38 @@ python scripts/validate_frontmatter.py wiki               # Frontmatter
 python scripts/export_wiki.py --wiki-dir wiki             # 搜索索引
 ```
 
+### 定时任务（SessionStart 钩子）
+
+项目内置**每周一次**的定时任务，由 Claude Code 的 `SessionStart` 钩子在「周一 ≥22:00（北京时间）」自动触发，并用 ISO 周戳去重（每周最多执行一次）：
+
+| 任务 | 脚本 | 完成标记 |
+| --- | --- | --- |
+| 扫描新 PDF 并更新清单 | `scripts/auto-sync-pdfs.ps1` | `.cache/pdf-sync-week.txt` |
+| 更新 Zotero 语义搜索库 | `scripts/auto-update-db.ps1` | `.cache/zotero-db-update-week.txt` |
+| 检查本周任务是否已完成 | `scripts/check-weekly-tasks.ps1` | —（只读，无副作用） |
+
+**钩子配置**（写入 `.claude/settings.json` 或 `.claude/settings.local.json`）：
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"<项目路径>\\scripts\\auto-update-db.ps1\"" }] },
+      { "hooks": [{ "type": "command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"<项目路径>\\scripts\\auto-sync-pdfs.ps1\"" }] },
+      { "hooks": [{ "type": "command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"<项目路径>\\scripts\\check-weekly-tasks.ps1\"" }] }
+    ]
+  }
+}
+```
+
+> ⚠️ `.claude/settings.local.json` 默认被 git 忽略（本机私有配置）；如需跨机器同步钩子，请写入被跟踪的 `.claude/settings.json`。
+
+**手动检查本周任务是否已完成**：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\check-weekly-tasks.ps1
+```
+
 ### Zotero 语义搜索
 
 ```powershell
