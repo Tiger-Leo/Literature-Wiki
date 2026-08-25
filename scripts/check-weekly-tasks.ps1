@@ -7,6 +7,8 @@
 #   powershell -NoProfile -ExecutionPolicy Bypass -File scripts\check-weekly-tasks.ps1
 #
 # 若本周某任务未完成，脚本会打印提示文字并给出可手动执行的命令。
+# 本检查仅在本周第一次打开项目时打印（以 .cache/weekly-check-week.txt 周戳去重），
+# 同周后续打开会静默退出，避免每次打开都重复提醒。
 
 $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
@@ -31,6 +33,7 @@ $weekKey = "$isoYear-W$($isoWeek.ToString('00'))"
 # ── 2. 预计算路径（避免在哈希表内联命令的解析问题）──────────────────
 $pdfStampFile    = Join-Path $CacheDir "pdf-sync-week.txt"
 $zoteroStampFile = Join-Path $CacheDir "zotero-db-update-week.txt"
+$checkStampFile  = Join-Path $CacheDir "weekly-check-week.txt"
 $pdfRunScript    = Join-Path $ScriptDir "auto-sync-pdfs.ps1"
 $zoteroRunScript = Join-Path $ScriptDir "auto-update-db.ps1"
 
@@ -58,7 +61,18 @@ if ($beijingNow.DayOfWeek -eq [System.DayOfWeek]::Monday -and $beijingNow.Hour -
     $triggerWindowOpen = $false
 }
 
-# ── 5. 逐任务检查并输出 ─────────────────────────────────────────────
+# ── 5. 每周仅首次打开时提醒（去重）────────────────────────────────
+# 只在每个 ISO 周第一次打开项目时打印本检查；同周再次打开则静默退出，
+# 避免每次打开都重复提示。以 .cache/weekly-check-week.txt 作为周戳。
+if (-not (Test-Path $CacheDir)) {
+    New-Item -ItemType Directory -Path $CacheDir -Force | Out-Null
+}
+if ((Get-WeekStamp -Path $checkStampFile) -eq $weekKey) {
+    exit 0
+}
+$weekKey | Out-File -FilePath $checkStampFile -Encoding utf8 -NoNewline
+
+# ── 6. 逐任务检查并输出 ─────────────────────────────────────────────
 $incomplete = @()
 
 Write-Output ""
