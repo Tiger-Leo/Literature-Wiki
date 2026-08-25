@@ -6,6 +6,10 @@
 #
 # Stamped weekly — even if you open this project multiple times on Monday night,
 # the detection only runs once per ISO week.
+#
+# -Force: bypass the Monday ≥ 22:00 guard and run immediately (for manual/on-demand use).
+
+param([switch]$Force)
 
 $ErrorActionPreference = "Stop"
 
@@ -41,13 +45,15 @@ if ($beijingNow.Month -eq 12 -and $isoWeek -eq 1) {
 
 $weekKey = "$isoYear-W$($isoWeek.ToString('00'))"
 
-# ── 3. Condition check ────────────────────────────────────────────
-if ($dayOfWeek -ne [System.DayOfWeek]::Monday) {
-    exit 0
-}
+# ── 3. Condition check (skippable via -Force) ─────────────────────
+if (-not $Force) {
+    if ($dayOfWeek -ne [System.DayOfWeek]::Monday) {
+        exit 0
+    }
 
-if ($hour -lt 22) {
-    exit 0
+    if ($hour -lt 22) {
+        exit 0
+    }
 }
 
 # ── 4. Check stamp file ───────────────────────────────────────────

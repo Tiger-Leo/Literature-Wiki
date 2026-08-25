@@ -88,7 +88,7 @@ foreach ($t in $tasks) {
         } else {
             Write-Output "       请尽快执行以下命令完成本周任务："
         }
-        Write-Output "         powershell -NoProfile -ExecutionPolicy Bypass -File `"$($t.RunScript)`""
+        Write-Output "         powershell -NoProfile -ExecutionPolicy Bypass -File `"$($t.RunScript)`" -Force"
     }
 }
 
