@@ -9,7 +9,7 @@ Examples:
   python scripts/batch_convert.py 5        # convert first 5
   python scripts/batch_convert.py 10 --language en  # 10 PDFs, English
 """
-import argparse, json, os, subprocess, sys
+import argparse, json, os, subprocess, sys, time
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -95,20 +95,37 @@ def main():
 
         env = os.environ.copy()
         env["PYTHONIOENCODING"] = "utf-8"
-        result = subprocess.run(
-            ["python", str(CONVERTER), real_path, "--converter", "mineru", "--language", language, "--overwrite"],
-            capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600,
-            encoding="utf-8", errors="replace", env=env,
-        )
 
-        if result.returncode == 0 and md_path.exists():
+        # Convert with one automatic retry: MinerU occasionally fails transiently
+        # (rate-limiting / server hiccups) under batch load. A single retry after a
+        # short pause is usually enough to succeed — the observed failures all pass
+        # on a clean re-run.
+        max_attempts = 2
+        result = None
+        for attempt in range(1, max_attempts + 1):
+            try:
+                result = subprocess.run(
+                    ["python", str(CONVERTER), real_path, "--converter", "mineru", "--language", language, "--overwrite"],
+                    capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600,
+                    encoding="utf-8", errors="replace", env=env,
+                )
+            except subprocess.TimeoutExpired:
+                # Treat a timeout as a failed attempt; retry once.
+                result = None
+            if result is not None and result.returncode == 0 and md_path.exists():
+                break
+            if attempt < max_attempts:
+                print(f"       attempt {attempt} failed — retrying once after 5s...")
+                time.sleep(5)
+
+        if result is not None and result.returncode == 0 and md_path.exists():
             print(f"       OK ({md_path.stat().st_size:,} bytes)")
             manifest["pdfs"][name]["converted"] = True
             success += 1
         else:
-            print(f"       FAILED")
-            if result.stderr:
-                print(f"       stderr: {result.stderr.strip()[:200]}")
+            print(f"       FAILED (after {max_attempts} attempts)")
+            if result is not None and result.stderr:
+                print(f"       stderr: {result.stderr.strip()[:1000]}")
             fail += 1
 
         print()
