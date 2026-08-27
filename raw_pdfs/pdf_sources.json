@@ -4086,35 +4086,35 @@
     "计量经济圈 - 2026 - 经管科研 AI 工作流手册.pdf": {
       "path": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\_\\计量经济圈_2026_经管科研 AI 工作流手册.pdf",
       "slug": "计量经济圈-2026-经管科研-ai-工作流手册",
-      "type": "journal-article",
+      "type": "book",
       "pages": 49,
       "converted": false
     },
     "计量经济圈 - 2026 - 经管科研 AI 提示词库.pdf": {
       "path": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\_\\计量经济圈_2026_经管科研 AI 提示词库.pdf",
       "slug": "计量经济圈-2026-经管科研-ai-提示词库",
-      "type": "journal-article",
+      "type": "book",
       "pages": 69,
       "converted": false
     },
     "计量经济圈 - 2026 - 经管社科论文 AI 复现手册.pdf": {
       "path": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\_\\计量经济圈_2026_经管社科论文 AI 复现手册.pdf",
       "slug": "计量经济圈-2026-经管社科论文-ai-复现手册",
-      "type": "journal-article",
+      "type": "book",
       "pages": 73,
       "converted": false
     },
     "计量经济圈 - 2026 - 面向 Agent 时代的因果推断方法手册.pdf": {
       "path": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\_\\计量经济圈_2026_面向 Agent 时代的因果推断方法手册.pdf",
       "slug": "计量经济圈-2026-面向-agent-时代的因果推断方法手册",
-      "type": "journal-article",
+      "type": "book",
       "pages": 98,
       "converted": false
     },
     "计量经济圈 - 2026 - 中国政策冲击与自然实验数据库手册.pdf": {
       "path": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\_\\计量经济圈_2026_中国政策冲击与自然实验数据库手册.pdf",
       "slug": "计量经济圈-2026-中国政策冲击与自然实验数据库手册",
-      "type": "dissertation",
+      "type": "book",
       "pages": 137,
       "converted": false
     },
@@ -6125,6 +6125,13 @@
       "slug": "刘玉杰-顾江-2025-数字文化产业创新模式的演化格局与驱动机制-基于16个文化新业态的实证研究",
       "type": "journal-article",
       "pages": 7,
+      "converted": false
+    },
+    "刘渝琳 王成 - 2026 - 从替代到赋能人工智能解困劳动力低端锁定.pdf": {
+      "path": "C:\\Users\\pc\\OneDrive\\【我的科研】\\literature\\数量经济技术经济研究\\刘渝琳_王成_2026_从替代到赋能人工智能解困劳动力低端锁定.pdf",
+      "slug": "刘渝琳-王成-2026-从替代到赋能人工智能解困劳动力低端锁定",
+      "type": "journal-article",
+      "pages": 26,
       "converted": false
     },
     "刘玉卿 张华兵 - 2018 - 基于条件估值法(CVM)的湿地周边农户受偿意愿及影响因素研究以江苏盐城珍禽自然保护区为例.pdf": {
