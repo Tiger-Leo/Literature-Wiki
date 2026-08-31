@@ -1,13 +1,13 @@
 # Auto-detect new PDFs in source library
 # Called by Claude Code SessionStart hook.
-# Checks: is it Monday ≥ 22:00 Beijing time, and hasn't been done this ISO week?
+# Checks: is it Monday ≥ 7:00 Beijing time, and hasn't been done this ISO week?
 # If yes, scans source directory, compares with pdf_sources.json, updates manifest
 # with new entries, and logs the results.
 #
 # Stamped weekly — even if you open this project multiple times on Monday night,
 # the detection only runs once per ISO week.
 #
-# -Force: bypass the Monday ≥ 22:00 guard and run immediately (for manual/on-demand use).
+# -Force: bypass the Monday ≥ 7:00 guard and run immediately (for manual/on-demand use).
 
 param([switch]$Force)
 
@@ -51,7 +51,7 @@ if (-not $Force) {
         exit 0
     }
 
-    if ($hour -lt 22) {
+    if ($hour -lt 7) {
         exit 0
     }
 }

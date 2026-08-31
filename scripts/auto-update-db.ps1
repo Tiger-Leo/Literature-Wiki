@@ -1,12 +1,12 @@
 # Auto-update Zotero Semantic Search DB
 # Called by Claude Code SessionStart hook.
-# Checks: is it Monday ≥ 22:00 Beijing time, and hasn't been done this ISO week?
+# Checks: is it Monday ≥ 7:00 Beijing time, and hasn't been done this ISO week?
 # If yes, spawns `zotero-mcp update-db --fulltext` in background and writes stamp file.
 #
 # Stamped weekly — even if you open this project multiple times on Monday night,
 # the update only runs once per ISO week.
 #
-# -Force: bypass the Monday ≥ 22:00 guard and run immediately (for manual/on-demand use).
+# -Force: bypass the Monday ≥ 7:00 guard and run immediately (for manual/on-demand use).
 
 param([switch]$Force)
 
@@ -53,8 +53,8 @@ if (-not $Force) {
         exit 0
     }
 
-    if ($hour -lt 22) {
-        # Monday but not yet 22:00 — nothing to do
+    if ($hour -lt 7) {
+        # Monday but not yet 7:00 — nothing to do
         exit 0
     }
 }
@@ -95,7 +95,6 @@ try {
     $weekKey | Out-File -FilePath $StampFile -Encoding utf8 -NoNewline
 
     $timestamp = $beijingNow.ToString("yyyy-MM-dd HH:mm:ss")
-    Add-Content -Path $logFile -Value "[$timestamp] Started zotero-mcp update-db --fulltext (week $weekKey, PID $($proc.Id))"
 
     # ── Show a reminder in the Claude Code session ──────────────────
     Write-Output 'Zotero semantic search DB is updating in background (zotero-mcp update-db --fulltext)'

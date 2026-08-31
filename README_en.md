@@ -42,7 +42,7 @@ python scripts/convert_pdf_to_markdown.py "Author and Author - YYYY - Title.pdf"
 ### Zotero Semantic Search
 
 ```powershell
-# Incrementally update semantic search database (run after adding new papers; auto-runs when project opened after 10:00 PM Monday, with fulltext extraction)
+# Incrementally update semantic search database (run after adding new papers; auto-runs when project opened after 7:00 AM Monday, with fulltext extraction)
 zotero-mcp update-db --fulltext
 
 # Check database status
@@ -57,13 +57,13 @@ zotero-mcp update-db --fulltext
 
 #### Auto-Update Mechanism
 
-> The semantic search database auto-update runs via a **Claude Code SessionStart hook**. Every time you open a Claude Code session in this project, it checks whether it's Monday after 10:00 PM and the update hasn't been done this ISO week — if so, it launches `zotero-mcp update-db --fulltext` in the background. Runs at most once per week.
+> The semantic search database auto-update runs via a **Claude Code SessionStart hook**. Every time you open a Claude Code session in this project, it checks whether it's Monday after 7:00 AM and the update hasn't been done this ISO week — if so, it launches `zotero-mcp update-db --fulltext` in the background. Runs at most once per week.
 
 **How it works:**
 
 1. Open a Claude Code session in this project
 2. `SessionStart` hook fires → runs `scripts/auto-update-db.ps1`
-3. Script checks: (a) Is it Monday? (b) ≥ 22:00 Beijing time? (c) Already done this week?
+3. Script checks: (a) Is it Monday? (b) ≥ 7:00 Beijing time? (c) Already done this week?
 4. All three true → background launch `zotero-mcp update-db --fulltext`, write `.cache/zotero-db-update-week.txt`
 5. Update runs in background; session not blocked
 
@@ -85,7 +85,7 @@ zotero-mcp update-db --force-rebuild  # full rebuild
 
 **Troubleshooting:**
 
-- Auto-update not triggered → check Monday + after 22:00 + first session this week; inspect `.cache/zotero-db-update-week.txt`
+- Auto-update not triggered → check Monday + after 7:00 + first session this week; inspect `.cache/zotero-db-update-week.txt`
 - Hook not executing → verify `hooks.SessionStart` config exists in `.claude/settings.local.json`
 - Update failed → run `zotero-mcp update-db` manually; ensure Zotero desktop is running
 - View background update log: `Get-Content .cache/zotero-db-update.log`
@@ -120,7 +120,7 @@ python -c "import json,glob;[print(f'{json.load(open(f))[\"canonical_slug\"]:55s
 
 ### Scheduled Tasks (SessionStart Hooks)
 
-The project ships **once-per-week** scheduled tasks, triggered by a Claude Code `SessionStart` hook on **Monday after 22:00 (Beijing time)** and de-duplicated with an ISO-week stamp (runs at most once per week):
+The project ships **once-per-week** scheduled tasks, triggered by a Claude Code `SessionStart` hook on **Monday after 7:00 (Beijing time)** and de-duplicated with an ISO-week stamp (runs at most once per week):
 
 | Task | Script | Stamp |
 | --- | --- | --- |

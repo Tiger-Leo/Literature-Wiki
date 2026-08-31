@@ -1,5 +1,5 @@
 ﻿# Check weekly scheduled tasks - 判断本周定时任务是否已完成
-# 对应两个 SessionStart 定时任务（均为「周一 >=22:00 北京时间」触发、每周一次）：
+# 对应两个 SessionStart 定时任务（均为「周一 >=7:00 北京时间」触发、每周一次）：
 #   1) auto-sync-pdfs.ps1  -> 扫描新 PDF 并更新清单 -> stamp: .cache/pdf-sync-week.txt
 #   2) auto-update-db.ps1  -> 更新 Zotero 语义搜索库  -> stamp: .cache/zotero-db-update-week.txt
 #
@@ -55,9 +55,9 @@ function Get-WeekStamp {
     return $raw.Trim()
 }
 
-# ── 4. 判断「周一 >=22:00」触发窗口是否已开启（用于提示措辞）─────────
+# ── 4. 判断「周一 >=7:00」触发窗口是否已开启（用于提示措辞）─────────
 $triggerWindowOpen = $true
-if ($beijingNow.DayOfWeek -eq [System.DayOfWeek]::Monday -and $beijingNow.Hour -lt 22) {
+if ($beijingNow.DayOfWeek -eq [System.DayOfWeek]::Monday -and $beijingNow.Hour -lt 7) {
     $triggerWindowOpen = $false
 }
 
@@ -98,7 +98,7 @@ foreach ($t in $tasks) {
             Write-Output "       （上次执行：$stamp，本周 $weekKey 尚未执行）"
         }
         if (-not $triggerWindowOpen) {
-            Write-Output "       提示：本周定时窗口（周一 22:00）尚未到，可稍后自动触发；也可手动运行："
+            Write-Output "       提示：本周定时窗口（周一 7:00）尚未到，可稍后自动触发；也可手动运行："
         } else {
             Write-Output "       请尽快执行以下命令完成本周任务："
         }

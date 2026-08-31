@@ -156,13 +156,13 @@ python scripts/export_wiki.py --wiki-dir wiki             # 搜索索引
 
 ### 定时任务（SessionStart 钩子）
 
-项目内置**每周一次**的定时任务，由 Claude Code 的 `SessionStart` 钩子在「周一 ≥22:00（北京时间）」自动触发，并用 ISO 周戳去重（每周最多执行一次）。其中「检查本周任务是否已完成」的提醒**仅在本周第一次打开项目时打印**，同周后续打开保持静默：
+项目内置**每周一次**的定时任务，由 Claude Code 的 `SessionStart` 钩子在「周一 ≥7:00（北京时间）」自动触发，并用 ISO 周戳去重（每周最多执行一次）。其中「检查本周任务是否已完成」的提醒**仅在本周第一次打开项目时打印**，同周后续打开保持静默：
 
 | 任务                   | 脚本                               | 完成标记                             |
 | ---------------------- | ---------------------------------- | ------------------------------------ |
 | 扫描新 PDF 并更新清单  | `scripts/auto-sync-pdfs.ps1`     | `.cache/pdf-sync-week.txt`         |
 | 更新 Zotero 语义搜索库 | `scripts/auto-update-db.ps1`     | `.cache/zotero-db-update-week.txt` |
-| 检查本周任务是否已完成 | `scripts/check-weekly-tasks.ps1` | `.cache/weekly-check-week.txt`      |
+| 检查本周任务是否已完成 | `scripts/check-weekly-tasks.ps1` | `.cache/weekly-check-week.txt`     |
 
 **钩子配置**（写入 `.claude/settings.json` 或 `.claude/settings.local.json`）：
 
@@ -195,7 +195,7 @@ zotero-mcp update-db --force-rebuild  # 全量重建
 zotero-mcp db-status                # 查看状态
 ```
 
-> 每周一 22:00 后打开项目时自动触发增量更新（`SessionStart` 钩子 → `auto-update-db.ps1`）。需 Zotero 桌面版运行中。
+> 每周一 7:00 后打开项目时自动触发增量更新（`SessionStart` 钩子 → `auto-update-db.ps1`）。需 Zotero 桌面版运行中。
 
 ---
 
